@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>RB-Tool</title>
+    <style>
+        /* Updated CSS based on the example */
+        body,
+        .container {
+            display: flex;
+            font-size: 12px;
+            margin: 0;
+        }
+        
+        .container {
+            flex-direction: column;
+            height: 100vh;
+            align-content: flex-start;
+        }
+        
+        .tabs {
+            background-color: #3c4252;
+            color: #fff;
+        }
+        
+        .tabs ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        .tabs li {
+            cursor: pointer;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+            margin-right: 10px;
+        }
+        
+        .tabs li.active {
+            background-color: #ffc501;
+        }
+        
+        .display-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        
+        .content-box {
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            padding: 20px;
+        }
+        
+        .indicator-container {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            z-index: 2;
+        }
+        
+        .indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        
+        .green {
+            background-color: green;
+        }
+        
+        .red {
+            background-color: red;
+        }
+        
+        #processing-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: 5px;
+            z-index: 3;
+            display: none;
+        }
+        
+        /* Table styles */
+        table {
+            width: auto;
+            table-layout: auto;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .sku-link {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+        
+        /* Define quadrants */
+        #status-container,
+        #order-details-container {
+            width: 30%;
+            float: left;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        
+        #sku-results,
+        #sortation-results {
+            width: 70%;
+            float: right;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        
+        /* Adjust the width of these containers */
+        #status-container table,
+        #order-details-container table,
+        #check-alarm-results table,
+        #sku-results-table,
+        #sortation-results-table {
+            width: 100%;
+            table-layout: auto;
+            border-collapse: collapse;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        
+        /* Additional styles for the Analyse button */
+        .analyse-button {
+            background-color: #ff4444;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .tab {
+            display: none;
+        }
+        
+        .tab.active {
+            display: block;
+        }
+        
+        /* CSS for table containers */
+        .tables-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .table-wrapper {
+            flex: 1 1 calc(50% - 15px);
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .scrollable-table,
+        #sku-results-container,
+        #sortation-results-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        
+        /* Adjust table styles */
+        #sku-results-table,
+        #sortation-results-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        
+    </style>
+
+    <!-- Add jQuery and DataTables CDN links -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.colresizable/1.6/jquery.colResizable.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+
+</head>
+
+<body>
+    <div class="container">
+    <div class="tabs">
+        <ul>
+            <li class="active" id="tab1">Order Check</li>
+            <li id="tab2">LoadUnit Check</li>
+            <!-- Add more tabs if needed -->
+        </ul>
+    </div>
+
+    <div class="display-area" id="display-area-1">
+        <div class="tab-content tab active" id="order-check-content">
+            <div class="indicator-container">
+                <div class="indicator green" id="connection-indicator"></div>
+                <span id="connection-status">DB connected</span>
+            </div>
+            <div class="content-box">
+                <label for="order-id">Enter Order No:</label>
+                <input type="text" id="order-id">
+                <button id="go-button">Go</button>
+                <button id="check-alarm-button">CHECK_ALARM</button>
+                <button class="analyse-button" onclick="analyseData()">Analyse</button>
+                
+               
+                <div class="tables-container">
+                    <div class="table-wrapper" id="status-container">
+                    <h2>Order Status</h2>
+                    <table id="status-table">
+                        <!-- Status table content -->
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Create Date</th>
+                                <th>Mod Date</th>
+                                <th>Sortation Order ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows for status table -->
+                        </tbody>
+                    </table>
+                    <h2>MISSING Results</h2>
+                    <table id="analysis-table">
+                        <!-- Analysis table content -->
+                        <thead>
+                            <tr>
+                                <th>SORT_ORDER</th>
+                                <th>REQ_VAS</th>
+                                <th>SKU</th>
+                                <th>REQ_QTY</th>
+                                <th>AVL_POUCH</th>
+                                <th>QL</th>
+                                <th>CP</th>
+                                <th>CT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows for analysis table -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="table-wrapper" id="sku-results">
+                    <h2>Inventory Results</h2>
+                    <div class="scrollable-table">
+                        <table id="sku-results-table">
+                            <!-- SKU Results table content -->
+                            <thead>
+                                <tr>
+                                    <th class="resizable-column">pouchable</th>
+                                    <th>SKU</th>
+                                    
+                                    <th>Country</th>
+                                    <th>Quality</th>
+                                    <th>Company</th>
+                                    <th>Quantity</th>
+                                    <th>Qty Free</th>
+                                    <th>Availability Status</th>
+                                    <th class="resizable-column">Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows for SKU results table -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-wrapper" id="order-details-container">
+                    <h2>Order Details Results</h2>
+                    
+                    <table id="order-details-table">
+                        <!-- Order details table content -->
+                        <thead>
+                            <tr>
+                                <th>Order Line ID</th>
+                                <th>SKU</th>
+                                <th>Company</th>
+                                <th>Country</th>
+                                <th>Quality</th>
+                                <th>Quantity</th>
+                                <th>Required VAS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows for order details table -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-wrapper" id="sortation-results">
+                    <h2>Sortation Results</h2>
+                    <div class="scrollable-table">
+                        <table id="sortation-results-table">
+                            <!-- Sortation Results table content -->
+                            <thead>
+                                <tr>
+                                    <th class="resizable-column">SLU_ID</th>
+                                    <th class="resizable-column">S_ORDER_ID</th>
+                                    <th>VAS_TYPE</th>
+                                    <th class="resizable-column">Location</th>
+                                    <th class="resizable-column">ARR_TIME</th>
+                                    <th>SKU</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows for sortation results table -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-wrapper" id="alarm-table-container">
+                    <h2>Alarm Details Results</h2>
+                    <table id="alarm-table">
+                        <!-- Alarm table content -->
+                        <thead>
+                            <tr>
+                                <th>Details</th>
+                                <th>Create Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows for alarm table -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="processing-indicator" class="hidden">Processing...</div>
+                </div>
+            </div>
+            <div class="tab-content tab" id="loadunit-check-content">
+                <!-- Content for LoadUnit Check tab -->
+            </div>
+        </div>
+    </div>
+<!-- Add a scroller for the SKU Results table -->
+<style>
+    #sku-results-container {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+    <div class="display-area" id="display-area-2"> <!-- This is where the new tab content will reside -->
+        <!-- Content for LoadUnit Check tab -->
+        <div class="tab-content tab" id="loadunit-check-content" style="display: none;">
+            <!-- ... (content specific to LoadUnit Check tab) ... -->
+        </div>    
+</style>
+    <script>
+        $(document).ready(function() {
+            // JavaScript for handling tab switching
+            $('.tabs li').click(function() {
+                const tabId = $(this).attr('id');
+                $('.tabs li').removeClass('active');
+                $(this).addClass('active');
+                $('.display-area').removeClass('active');
+                $(`#${tabId.replace('tab', 'display-area')}`).addClass('active');
+            });
+        });
+          
+        document.getElementById('go-button').addEventListener('click', executeQueries);
+        document.getElementById('order-id').addEventListener('keydown', function (event) {
+            if (event.key === "Enter") {
+                executeQueries();
+            }
+        });
+        
+        function executeQueries() {
+            clearTable(document.getElementById('status-table'));
+            clearTable(document.getElementById('order-details-table'));
+            clearTable(document.getElementById('alarm-table'));
+            clearTable(document.getElementById('sku-results-table'));
+            clearTable(document.getElementById('sortation-results-table'));
+            clearTable(document.getElementById('analysis-table')); 
+            
+            var orderId = document.getElementById('order-id').value;
+            var statusTable = document.getElementById('status-table').querySelector('tbody');
+            var orderDetailsTable = document.getElementById('order-details-table').querySelector('tbody');
+            var alarmTable = document.getElementById('alarm-table').querySelector('tbody');
+            var skuResultsTable = document.getElementById('sku-results-table').querySelector('tbody');
+            var sortationResultsTable = document.getElementById('sortation-results-table').querySelector('tbody');
+            
+            document.getElementById('processing-indicator').style.display = 'block';
+        
+            fetch('/execute-queries', {
+                method: 'POST',
+                body: new URLSearchParams({ order_id: orderId }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('processing-indicator').style.display = 'none';
+        
+                if (data.error) {
+                    // Handle the error
+                    console.error('Error executing queries:', data.error);
+                } else {
+                    var skuValue = ""; // Initialize SKU value
+        
+                    if (data.ORDER_DETAILS.length > 0) {
+                        // Extract SKU value from the first column of Order Details
+                        skuValue = data.ORDER_DETAILS[0].SKU;
+                        
+                        data.ORDER_DETAILS.forEach(function(item) {
+                            orderDetailsTable.innerHTML += '<tr><td>' + item.ORDER_LINE_ID + '</td><td class="sku-link" onclick="showSkuResults(\'' + item.SKU + '\')">' + item.SKU + '</td><td>' + item.COMPANY + '</td><td>' + item.COUNTRY + '</td><td>' + item.QUALITY + '</td><td>' + item.QUANTITY + '</td><td>' + item.REQUIRED_VAS + '</td></tr>';
+                        });
+                    }
+        
+                    if (data.STATUS.length > 0) {
+                        data.STATUS.forEach(function(item) {
+                            statusTable.innerHTML += '<tr><td>' + item.STATUS + '</td><td>' + item.F_CREATE_DATE + '</td><td>' + item.F_MOD_DATE + '</td><td>' + item.SORTATION_ORDER_ID + '</td></tr>';
+                        });
+                    }
+        
+                    if (data.ALARM.length > 0) {
+                        document.getElementById('check-alarm-results').style.display = 'block';
+        
+                        data.ALARM.forEach(function(item) {
+                            alarmTable.innerHTML += '<tr><td>' + item.DETAILS + '</td><td>' + item.CREATE_DATE + '</td></tr>';
+                        });
+                    }
+        
+                    // Show the SKU results table
+                    document.getElementById('sku-results').style.display = 'block';
+        
+                    // Display SKU Results
+                    if (data.INV_RESULTS.length > 0) {
+                        // Calculate the total quantity and display it
+                        var totalQuantity = data.INV_RESULTS.reduce((sum, item) => sum + item.QTY, 0);
+                        document.getElementById('sum-quantity').innerText = totalQuantity;
+        
+                        data.INV_RESULTS.forEach(function(item) {
+                            skuResultsTable.innerHTML += '<tr><td>' + item.POUCHABLE + '</td><td>' + item.SKU + '</td><td>' + item.COUNTRY + '</td><td>' + item.QUALITY + '</td><td>' + item.COMPANY + '</td><td>' + item.QTY + '</td><td>' + item.QTY_FREE + '</td><td>' + item.AVAILABILITY_STATUS + '</td><td>' + item.LOC + '</td></tr>';
+                        });
+                        
+                        // Sort the SKU Results table by Availability Status 'reserved' first
+                        sortTable('sku-results-table', 7, 'reserved');
+        
+                        // Make the SKU Results table headers filterable
+                        makeTableFilterable('sku-results-table');
+                    }
+        
+                    // Show the Sortation results table
+                    document.getElementById('sortation-results').style.display = 'block';
+        
+                    // Filter Sortation results based on extracted SKU value
+                    if (data.SORTATION_RESULTS.length > 0) {
+                        var matchingSortationResults = data.SORTATION_RESULTS.filter(item => item.SKU === skuValue);
+        
+                        if (matchingSortationResults.length > 0) {
+                            matchingSortationResults.forEach(function(item) {
+                                sortationResultsTable.innerHTML += '<tr><td>' + item.SLU_ID + '</td><td>' + item.S_ORDER_ID + '</td><td>' + item.VAS_TYPE + '</td><td>' + item.LOCATION + '</td><td>' + item.ARR_TIME + '</td><td>' + item.SKU + '</td></tr>';
+                            });
+                            console.log('Sortation rows appended successfully.');
+                        } else {
+                            console.log('No matching Sortation results found for SKU:', skuValue);
+                        }
+                    } else {
+                        console.log('No Sortation results available.');
+                    }
+                }
+                return showSkuResults(skuValue); // Initiate the next fetch operation
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('processing-indicator').style.display = 'none';
+            });
+        }
+        document.getElementById('analyse-button').addEventListener('click', analyseData);
+
+        function analyseData() {
+            clearTable(document.getElementById('analysis-table'));
+        
+            var statusTable = document.getElementById('status-table').querySelector('tbody');
+            var analysisTable = document.getElementById('analysis-table').querySelector('tbody');
+        
+            // Getting the sortation_order_id from the Status table
+            var sortationOrderIdIndex = 3; // Assuming the index of the sortation_order_id column
+            var sortationOrderId = statusTable.querySelector('tr:first-child').querySelectorAll('td')[sortationOrderIdIndex].innerText;
+                
+            if (!sortationOrderId) {
+                console.error('Sortation Order ID value not found in the Status table');
+                return;
+            }
+            
+            document.getElementById('processing-indicator').style.display = 'block';
+            
+            fetch('/analyse-data', {
+                method: 'POST',
+                body: new URLSearchParams({ sortation_order_id: sortationOrderId }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Fetch Response:', data); // Log the received data
+                document.getElementById('processing-indicator').style.display = 'none';
+        
+                if (data.error) {
+                    // Handle the error
+                    console.error('Error executing analysis:', data.error);
+                } else {
+                    if (data.ANALYSIS_RESULTS.length > 0) {
+                        analysisTable.innerHTML = ''; // Clear existing table content
+                        data.ANALYSIS_RESULTS.forEach(function(item) {
+                            analysisTable.innerHTML += '<tr><td>' + item.SORT_ORDER + '</td><td>' + item.REQ_VAS + '</td><td>' + item.SKU + '</td><td>' + item.REQ_QTY + '</td><td>' + item.AVL_POUCH + '</td><td>' + item.QL + '</td><td>' + item.CP + '</td><td>' + item.CT + '</td></tr>';
+                        });
+                    } else {
+                        console.log('No analysis results found.');
+                        // Clear the table content if no analysis results are available
+                        analysisTable.innerHTML = '';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching analysis data:', error);
+                document.getElementById('processing-indicator').style.display = 'none';
+            });
+        }
+        
+        function showSkuResults(sku) {
+            var skuResultsTable = $('#sku-results-table').DataTable();
+            var sortationResultsTable = $('#sortation-results-table').DataTable();
+        
+            document.getElementById('processing-indicator').style.display = 'block';
+        
+            fetch('/fetch-sku-results', {
+                method: 'POST',
+                body: new URLSearchParams({ sku: sku }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('processing-indicator').style.display = 'none';
+        
+                console.log('Received data:', data);
+        
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    console.log('SKU Results:', data.INV_RESULTS);
+                    console.log('Sortation Results:', data.SORTATION_RESULTS);
+        
+                    // Clear existing DataTables
+                    skuResultsTable.clear().destroy();
+                    sortationResultsTable.clear().destroy();
+        
+                    // Display SKU Results
+                    if (data.INV_RESULTS && data.INV_RESULTS.length > 0) {
+                        skuResultsTable = $('#sku-results-table').DataTable({
+                            data: data.INV_RESULTS,
+                            columns: [
+                                { title: 'SKU' },
+                                { title: 'Pouchable' },
+                                { title: 'Country' },
+                                { title: 'Quality' },
+                                { title: 'Company' },
+                                { title: 'Quantity' },
+                                { title: 'Free Quantity' },
+                                { title: 'Availability Status' },
+                                { title: 'Location' }
+                            ]
+                        });
+                    }
+        
+                    // Display Sortation Results
+                    if (data.SORTATION_RESULTS && data.SORTATION_RESULTS.length > 0) {
+                        sortationResultsTable = $('#sortation-results-table').DataTable({
+                            data: data.SORTATION_RESULTS,
+                            columns: [
+                                { title: 'SLU ID' },
+                                { title: 'S Order ID' },
+                                { title: 'VAS Type' },
+                                { title: 'Location' },
+                                { title: 'Arrival Time' },
+                                { title: 'SKU' }
+                            ]
+                        });
+                    }
+        
+                    // Show the SKU and Sortation results tables
+                    document.getElementById('sku-results').style.display = 'block';
+                    document.getElementById('sortation-results').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching SKU and Sortation results:', error);
+                document.getElementById('processing-indicator').style.display = 'none';
+            });
+        }
+        
+        function clearTable(table) {
+            if (table) {
+                var tbody = table.querySelector('tbody');
+                if (tbody) {
+                    tbody.innerHTML = '';
+                }
+            }
+        }
+        
+        
+        function makeTableFilterable(tableId) {
+            $('#' + tableId).DataTable();
+        }
+        
+        
+        
+            function sortTable(tableId, columnIndex, targetValue) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById(tableId);
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < rows.length - 1; i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName('td')[columnIndex];
+                        y = rows[i + 1].getElementsByTagName('td')[columnIndex];
+                        if (x.innerHTML === targetValue && y.innerHTML !== targetValue) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+    
+            let skuValues = [];
+document.querySelectorAll('#analyse-data-results-table td:nth-child(1)').forEach(cell => {
+    skuValues.push(cell.textContent.trim());
+});
+
+// Search and highlight matching SKU values in Order Details Results table
+let orderDetailsCells = document.querySelectorAll('#order-details-results-table td:nth-child(1)');
+
+skuValues.forEach((sku, index) => {
+    console.log('SKU:', sku); // Check if the SKU values are being retrieved correctly
+    orderDetailsCells.forEach(cell => {
+        console.log('Cell content:', cell.textContent.trim()); // Check cell content
+        if (cell.textContent.trim() === sku) {
+            let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            cell.style.backgroundColor = randomColor;
+        }
+    });
+});
+        </script>
+    </body>
+    
+    </html>
