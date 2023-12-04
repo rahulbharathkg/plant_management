@@ -1,0 +1,63 @@
+/* CSS for Bulk Orders tab */
+#bulk-orders-content .bulk-section {
+    padding: 20px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+}
+
+#bulk-orders-content .input-section {
+    margin-bottom: 20px;
+}
+
+#bulk-orders-content .input-section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+#bulk-orders-content .input-section textarea {
+    width: calc(100% - 30px); /* Adjust as needed */
+    height: 100px;
+    resize: vertical;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    font-family: Arial, sans-serif;
+}
+
+#bulk-orders-content .input-section button {
+    padding: 8px 15px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#bulk-orders-content .order-list,
+#bulk-orders-content .order-details {
+    margin-bottom: 20px;
+}
+
+#bulk-orders-content .order-list h2,
+#bulk-orders-content .order-details h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+#bulk-orders-content .order-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#bulk-orders-content .order-list ul li {
+    margin-bottom: 5px;
+}
+
+#bulk-orders-content .order-details #order-details-content {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}

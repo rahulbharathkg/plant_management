@@ -1,0 +1,441 @@
+/* Reset margin and padding for all elements */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    /* Set the background image */
+    background-image: url('https://lh3.googleusercontent.com/pw/ADCreHe-VzQN_m0AEBhxu5i9JC4fdzDxXyKWfz-Q9oGQm9AkG4m6m9mWLKy9JYCqVMKGH6vSYrkjb5qlcu9I_dFEluN6AxiIkHFfDZDdWGfFuheWl2PtapOy8Kmh9FeOIrhA7nptUCLbZCZ1ifU3ro_B3NhhM9HX6_ExqMkM2bYGuoiV0eq5fJx6MOVPkFehttrGe5cwOwaD5aaqQae0mB_G3889qBN2LCqThq0x--LX2iMn72uG-tfB3CyPcxdHieOqQsiHXdaHuk6x3J_y0FkdRamCTmAtRGZ1SVfBqnGJPSE1Eyz1ZyNUVMNZ2e9qfGpR19Li_Cr6cSckMvTEBjPjY0ZA6SvpUk4Nl238gSpfkF3t05Vd9JEBF2rIIChc3BazXRSElXazkXgtCn6Q6lUYu9oPqYhX2HDk0uiKpQeQ9ZazrGoGBtw3kj3y7SYaeYA__XRQMUyFSNqGNZcZgXl0zwbIQsi-cfpbEFoi-NLpe0CzwImiyr6j3nyVJjx3Eqn7Oa7MVHsQSobkfeSXi4pgklcMhpweX-NDw8_zhSu4QjjoTTHUimXpJSKWEZeKWtTAT8OjN22ZOXdDhNiIfvHUxnvm9bljyhGtC0SX3fCO3xW9N0YLFjH4aDkYBnCXBKdmqWOAD9BtmsDQgRrpF292UZPOnDhZjw2daOEhXdhXCQI1J8lqNXgTzxmFjl9aoclSDTcRkQ0bNwtAqAjHzsiSgA2-cVv9emZYC-d6gqLDm4tVMynRSJTZnydQcMxeSnPSrpIwq5_8gh1ThMobyhUkeVks7YDMRq--V-ciWb6Pcl826RMOhVUaMqAfPBySLf8YyCs_44b2nMD9Um0_Vk91o47fbpCOdIKZV4xlEW9I5Bx9jRcGy7kVlgHVxYaJHawP7rCv_EQ=w513-h911-s-no-gm?authuser=0');
+    /* Ensure it covers the entire screen */
+    background-size: cover;
+    /* Center the image */
+    background-position: center;
+    /* Apply transparency */
+    opacity: 0.9; /* Adjust the value for your preferred level of transparency */
+    /* Add a fallback background color in case the image isn't loaded */
+    background-color: rgba(255, 255, 255, 0.9); /* Adjust color and transparency as needed */
+}
+
+/* Styling for the logo */
+.logo-container {
+    text-align: center;
+    margin-top: 10px; /* Adjust as needed */
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+
+.logo {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 32px;
+    color: red;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    /* Add any additional styling here */
+}
+
+.container {
+    padding-top: 50px; /* Adding 'px' for the unit */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-content: flex-start;
+    font-size: 12px;
+    color: #333;
+}
+
+.tabs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #455a64;
+    color: #fff;
+    padding: 1px 1px; /* Adjust the top and bottom padding */
+    height: 30px;
+    font-size: 13px; /* Modify the font size */
+    border-bottom: 2px solid #37474f;
+    z-index: 2;
+}
+
+
+#sku-results,
+#sortation-results {
+    width: 70%;
+    float: right;
+    padding: 0 15px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1; /* Keep the z-index lower than the tabs */
+}
+
+.tabs ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.tabs li {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 2px solid #37474f;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.tabs li:hover {
+    background-color: #546e7a;
+}
+
+.tabs li.active {
+    background-color: #ffc501;
+    border-bottom: 2px solid #ffd54f;
+}
+
+
+.display-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.content-box {
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    padding: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* DB Connection Indicator */
+.db-connection-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    background-color: #4caf50;
+}
+
+.db-disconnected .db-connection-indicator {
+    background-color: #f44336;
+}
+
+#go-button {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+#check-alarm-button {
+    background-color: #ff9800; /* Orange */
+    color: white;
+}
+
+
+/* Processing Indicator */
+#processing-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url('https://media.giphy.com/media/fjwX1MG2Y4fRDKP4LS/giphy.gif');
+    background-size: contain; /* or adjust as needed: cover, auto, etc. */
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Set the size of the indicator container if necessary */
+    width: 100px; /* Adjust according to your design */
+    height: 100px; /* Adjust according to your design */
+    
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 3;
+    display: none;
+    animation: bounce 2s infinite ease-in-out;
+    font-size: 36px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Table styles */
+table {
+    width: auto;
+    table-layout: auto;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    background-color: #fff;
+}
+
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+th {
+    background-color: #78909c;
+    color: #fff;
+    font-size: 11px;
+    padding: 5px;
+    text-transform: uppercase;
+}
+
+.sku-link {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Define quadrants */
+#status-container,
+#order-details-container {
+    width: 30%;
+    float: left;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+#sku-results,
+#sortation-results {
+    width: 70%;
+    float: right;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+/* Make the table containers independent and fixed height */
+#sku-results-container,
+#sortation-results-container {
+    height: 320px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrollbar if needed */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Scroller for the SKU Results table */
+#sku-results-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Adjust the width of these containers */
+#status-container table,
+#order-details-container table,
+#check-alarm-results table,
+#sku-results-table,
+#sortation-results-table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* Additional styles for the Analyse button */
+.analyse-button {
+    background-color: #ff4444;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.analyse-button:hover {
+    background-color: #ff6e40;
+}
+
+.tab {
+    display: none;
+}
+
+.tab.active {
+    display: block;
+}
+
+.hidden-table {
+    display: none;
+}
+
+/* CSS for table containers */
+.tables-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Table wrapper styles */
+.table-wrapper {
+    flex: 1 1 calc(50% - 20px);
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+
+#sku-results-container {
+    position: relative;
+}
+.buttons-container-sku {
+    display: flex;
+    justify-content: flex-end;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+    padding: 1px;
+    border-bottom: 1px solid #ccc;
+}
+.buttons-container-sku button.active,
+.buttons-container-sortation button.active {
+    background-color: #ff6e40; /* Change to your preferred color */
+    color: white;
+}
+
+
+
+.scrollable-table,
+#sku-results-container,
+#sortation-results-container {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.buttons-container-sortation {
+    display: flex;
+    justify-content: flex-end;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+    padding: 1px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Adjust table styles */
+#sku-results-table,
+#sortation-results-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Table-specific styles */
+#status-container table {
+    background-color: #cfd8dc;
+}
+
+#order-details-container table {
+    background-color: #ffe0b2;
+}
+
+#sku-results-table {
+    background-color: #b2dfdb;
+}
+
+#sortation-results-table {
+    background-color: #ffccbc;
+}
+
+/* Make the table headers sticky */
+#sku-results-table thead,
+#sortation-results-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+}
+
+
+/* Enhance the appearance of buttons */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #546e7a;
+    color: #fff;
+}
+
+/* Style text boxes */
+input[type="text"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Improve scrollbar appearance */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Styling for tabs */
+.tabs {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background-color: #455a64;
+    color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.tab-button:hover {
+    border-color: #ffc501;
+}
+
+.active-tab {
+    border-color: #ffc501;
+    background-color: #546e7a;
+}
