@@ -1,8 +1,0 @@
-kering_prod =
-  (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = 172.30.200.155)(PORT = 1521))
-    (CONNECT_DATA =
-      (SERVER = DEDICATED)
-      (SERVICE_NAME = PROD)
-    )
-  )
