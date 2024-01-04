@@ -23,6 +23,9 @@ The system is primarily utilized for overseeing logistical processes within auto
 ### Bulk Order Processing
 - **Bulk Order Input:** Allows users to input bulk order IDs for streamlined batch processing.
 - **Order List Management:** Provides an organized view of order lists and their corresponding details, enhancing the handling of bulk orders.
+- 
+### Bulk Order Processing
+Interactive animation of the flow of the pouches in the plant is displayed as a layout with live updationof the data. It also do algorithms to check the errors and inteliigently alerts and manages to automate the flow.
 
 ## Technologies Used
 - **Frontend:** HTML, CSS, JavaScript
