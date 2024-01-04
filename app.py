@@ -1,11 +1,59 @@
-from flask import Flask, render_template, request, jsonify
 import cx_Oracle
 import sys
+from flask import Flask, render_template, redirect, url_for, session, request, jsonify
 sys.path.append(r'C:\Users\rkrishni\OneDrive - ALTEN Group\python\tote-and-box-ocr')
 from config import db_username, db_password, db_host, db_port, db_service_name
-
+from flask import Flask, render_template, redirect, url_for, session, request
+from functools import wraps
+from loadunit_functions import perform_trace_check, perform_transport_request_check, perform_loadunit_check
+from pss_monitor import fetch_pss_data, fetch_presort_lane_data
+import traceback
 
 app = Flask(__name__, template_folder='templates')
+app.secret_key = 'your_secret_key'
+
+# A dictionary to simulate user authentication (replace this with your user database)
+valid_users = {
+    '123': '123'
+}
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        if username in valid_users and valid_users[username] == password:
+            session['username'] = username
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error='Invalid credentials')
+    
+    return render_template('login.html')
+
+@app.route('/home')
+@login_required
+def home():
+    return render_template('index.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+@app.route('/')
+def index():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 # Initialize Oracle Client
 cx_Oracle.init_oracle_client(lib_dir=r'C:\Users\rkrishni\OneDrive - ALTEN Group\python\tote-and-box-ocr\instantclient-basic-windows.x64-21.12.0.0.0dbru\instantclient_21_12')
@@ -15,15 +63,6 @@ db_dsn = cx_Oracle.makedsn(db_host, db_port, service_name=db_service_name)
 
 # Establish a connection
 db_connection = cx_Oracle.connect(db_username, db_password, db_dsn)
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/bulk_orders')
-def bulk_orders():
-    return render_template('bulk_orders.html')
-
 
 # Route to execute the ORDER DETAILS and STATUS queries
 @app.route('/execute-queries', methods=['POST'])
@@ -65,6 +104,7 @@ def execute_queries():
         SELECT A.STATUS,
                TO_CHAR(A.CREATE_DATE, 'DD-MON-YY HH.MI PM') AS F_CREATE_DATE,
                TO_CHAR(A.MOD_DATE, 'DD-MON-YY HH.MI PM') AS F_MOD_DATE,
+               TO_CHAR(A.PACK_TIME_TARGET, 'DD-MON-YY HH.MI PM') AS TARGET_DATE,
                B.SORTATION_ORDER_ID
         FROM ORP_ORG_ORDER A
         LEFT JOIN ORP_SOM_ORDER B ON A.PK = B.ORDER_PK
@@ -118,11 +158,12 @@ def execute_queries():
            
             if result_status:
                 for row_status in result_status:
-                    status_status, create_date_status, mod_date_status, sortation_order_id_status = row_status
+                    status_status, create_date_status, mod_date_status, pack_date_status, sortation_order_id_status = row_status
                     result_dict["STATUS"].append({
                         "STATUS": status_status,
                         "F_CREATE_DATE": create_date_status,
                         "F_MOD_DATE": mod_date_status,
+                        "F_PACK_TARGET": pack_date_status,
                         "SORTATION_ORDER_ID": sortation_order_id_status
                     })
             return jsonify(result_dict)
@@ -146,9 +187,9 @@ def fetch_sku_results():
         sql_query_inv = """
         SELECT
             x.SKU,
-            x.COUNTRY_OF_ORIGIN AS COUNTRY,
-            x.QUALITY,
-            x.COMPANY,
+            x.COUNTRY_OF_ORIGIN AS CN,
+            x.QUALITY AS QL,
+            x.COMPANY AS CP,
             x.QUANTITY AS QTY,
             x.QUANTITY_FREE AS QTY_FREE,
             l.AVAILABILITY_STATUS,
@@ -165,23 +206,37 @@ def fetch_sku_results():
         WHERE x.SKU = :sku
         """
 
-        sql_query_sortation = """
-        SELECT
-            a.ID AS SLU_ID,
-            a.PLANNED_ORDER_ID AS S_ORDER_ID,
-            LISTAGG(b.VAS_TYPE, ', ') WITHIN GROUP (ORDER BY b.VAS_TYPE) AS VAS_TYPE,
-            a.LOCATION,
-            a.ARRIVED_AT_LOCATION_DATE AS ARR_TIME,
-            SUBSTR(a.SORTATION_QUANTITY_UNIT, 1, 14) AS SKU
-        FROM
-            PSS_COR_SORT_LOAD_UNIT a
-        LEFT JOIN
-            PSS_COR_SLU_REQ_VAS_TYPE b ON b.SORTATION_LOAD_UNIT = a.ID
-        JOIN
-            COR_SKU_SKU_QTY_UNIT_DIAL_V c ON a.SORTATION_QUANTITY_UNIT = c.pk
-        WHERE a.SORTATION_QUANTITY_UNIT LIKE :sku
-        GROUP BY a.ID, a.PLANNED_ORDER_ID, a.LOCATION, a.ARRIVED_AT_LOCATION_DATE, SUBSTR(a.SORTATION_QUANTITY_UNIT, 1, 14)
-        """
+        sql_query_sortation = query = """
+    SELECT
+        a.ID AS SLU_ID,
+        a.PLANNED_ORDER_ID AS S_ORDER_ID,
+        LISTAGG(b.VAS_TYPE, ', ') WITHIN GROUP (ORDER BY b.VAS_TYPE) AS VAS_TYPE,
+        a.LOCATION,
+        a.ARRIVED_AT_LOCATION_DATE AS ARR_TIME,
+        SUBSTR(a.SORTATION_QUANTITY_UNIT, 1, 14) AS SKU,
+        a.ERROR_CODE AS ERR,
+        COMPANY AS CP,
+        QUALITY AS QL,
+        COUNTRY_OF_ORIGIN AS CN
+    FROM
+        PSS_COR_SORT_LOAD_UNIT a
+    LEFT JOIN
+        PSS_COR_SLU_REQ_VAS_TYPE b ON b.SORTATION_LOAD_UNIT = a.ID
+    JOIN
+        COR_SKU_SKU_QTY_UNIT_DIAL_V c ON a.SORTATION_QUANTITY_UNIT = c.pk
+    WHERE a.SORTATION_QUANTITY_UNIT LIKE :sku
+    GROUP BY
+        a.ID,
+        a.PLANNED_ORDER_ID,
+        a.LOCATION,
+        a.ARRIVED_AT_LOCATION_DATE,
+        SUBSTR(a.SORTATION_QUANTITY_UNIT, 1, 14),
+        a.ERROR_CODE,
+        COMPANY,
+        QUALITY,
+        COUNTRY_OF_ORIGIN
+"""
+
 
         cursor = db_connection.cursor()
         result_inv = cursor.execute(sql_query_inv, sku=sku).fetchall()
@@ -325,6 +380,80 @@ def check_alarm():
 
     finally:
         db_cursor_alarm.close()
+        
+@app.route('/perform_trace_check', methods=['POST'])
+def perform_trace():
+    try:
+        loadunit_id = request.json['loadunit_id']
+        print('Received loadunit ID:', loadunit_id)  # Log the received loadunit ID
 
+        result = perform_trace_check(loadunit_id, db_connection)
+        print("Result from perform_trace_check:", result)  # Log the result from the function
+
+        return jsonify(result)
+    except Exception as e:
+        print("Exception occurred:", e)  # Log if there's an exception
+        return jsonify({"error": f"Error: {str(e)}"})
+    
+    
+@app.route('/perform_transport_request_check', methods=['POST'])
+def perform_transport_request():
+    try:
+        loadunit_id = request.json['loadunit_id']
+        print('Received loadunit ID:', loadunit_id)  # Log the received loadunit ID
+
+        result = perform_transport_request_check(loadunit_id, db_connection)
+        print("Result from perform_transport_request_check:", result)  # Log the result from the function
+
+        return jsonify(result)
+    except Exception as e:
+        print("Exception occurred:", e)  # Log if there's an exception
+        return jsonify({"error": f"Error: {str(e)}"})
+    
+@app.route('/perform_loadunit_check', methods=['POST'])
+def perform_loadunit_checking():
+    try:
+        loadunit_id = request.json['loadunit_id']
+        print('Received loadunit ID:', loadunit_id)  # Log the received loadunit ID
+
+        result = perform_loadunit_check(loadunit_id, db_connection)  # Replace with your query function
+        print("Result from perform_loadunit_check_query:", result)  # Log the result from the function
+
+        return jsonify(result)
+    except Exception as e:
+        print("Exception occurred:", e)  # Log if there's an exception
+        return jsonify({"error": f"Error: {str(e)}"})
+
+@app.route('/fetch_pss_data', methods=['GET'])
+def get_pss_data():
+    try:
+        pss_data = fetch_pss_data(db_connection)
+        if pss_data is not None:
+            app.logger.info("PSS data fetched successfully")
+            print("PSS data fetched successfully:", pss_data)  # Log successful data retrieval
+            return jsonify(pss_data)
+        else:
+            app.logger.error("Failed to fetch PSS data")
+            return jsonify({"error": "Failed to fetch PSS data"})
+    except Exception as e:
+        app.logger.error(f"Error fetching PSS data: {traceback.format_exc()}")
+        return jsonify({"error": "Failed to fetch PSS data"})
+
+@app.route('/fetch_presort_lane_data', methods=['GET'])
+def get_presort_lane_data():
+    try:
+        presort_lane_data = fetch_presort_lane_data(db_connection)
+        if presort_lane_data is not None:
+            app.logger.info("Presort lane data fetched successfully")
+            print("Presort lane data fetched successfully:", presort_lane_data)  # Log successful data retrieval
+            return jsonify(presort_lane_data)
+        else:
+            app.logger.error("Failed to fetch presort lane data")
+            return jsonify([{"error": "Failed to fetch presort lane data"}])
+    except Exception as e:
+        app.logger.error(f"Error fetching presort lane data: {traceback.format_exc()}")
+        return jsonify([{"error": "Failed to fetch presort lane data"}])
+        
+    
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080)
+    app.run(host='0.0.0.0', port=8080,debug=True)
