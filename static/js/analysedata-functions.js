@@ -206,7 +206,7 @@ function analyseData() {
     var analysisTable = document.getElementById('analysis-table').querySelector('tbody');
         
     // Getting the sortation_order_id from the Status table
-    var sortationOrderIdIndex = 3; // Assuming the index of the sortation_order_id column
+    var sortationOrderIdIndex = 4; // Assuming the index of the sortation_order_id column
     var sortationOrderId = statusTable.querySelector('tr:first-child').querySelectorAll('td')[sortationOrderIdIndex].innerText;
 
     if (!sortationOrderId) {

@@ -5,9 +5,9 @@ html {
     padding: 0;
     font-family: Arial, sans-serif;
     /* Set the background image */
-    background-image: url('https://lh3.googleusercontent.com/pw/ADCreHe-VzQN_m0AEBhxu5i9JC4fdzDxXyKWfz-Q9oGQm9AkG4m6m9mWLKy9JYCqVMKGH6vSYrkjb5qlcu9I_dFEluN6AxiIkHFfDZDdWGfFuheWl2PtapOy8Kmh9FeOIrhA7nptUCLbZCZ1ifU3ro_B3NhhM9HX6_ExqMkM2bYGuoiV0eq5fJx6MOVPkFehttrGe5cwOwaD5aaqQae0mB_G3889qBN2LCqThq0x--LX2iMn72uG-tfB3CyPcxdHieOqQsiHXdaHuk6x3J_y0FkdRamCTmAtRGZ1SVfBqnGJPSE1Eyz1ZyNUVMNZ2e9qfGpR19Li_Cr6cSckMvTEBjPjY0ZA6SvpUk4Nl238gSpfkF3t05Vd9JEBF2rIIChc3BazXRSElXazkXgtCn6Q6lUYu9oPqYhX2HDk0uiKpQeQ9ZazrGoGBtw3kj3y7SYaeYA__XRQMUyFSNqGNZcZgXl0zwbIQsi-cfpbEFoi-NLpe0CzwImiyr6j3nyVJjx3Eqn7Oa7MVHsQSobkfeSXi4pgklcMhpweX-NDw8_zhSu4QjjoTTHUimXpJSKWEZeKWtTAT8OjN22ZOXdDhNiIfvHUxnvm9bljyhGtC0SX3fCO3xW9N0YLFjH4aDkYBnCXBKdmqWOAD9BtmsDQgRrpF292UZPOnDhZjw2daOEhXdhXCQI1J8lqNXgTzxmFjl9aoclSDTcRkQ0bNwtAqAjHzsiSgA2-cVv9emZYC-d6gqLDm4tVMynRSJTZnydQcMxeSnPSrpIwq5_8gh1ThMobyhUkeVks7YDMRq--V-ciWb6Pcl826RMOhVUaMqAfPBySLf8YyCs_44b2nMD9Um0_Vk91o47fbpCOdIKZV4xlEW9I5Bx9jRcGy7kVlgHVxYaJHawP7rCv_EQ=w513-h911-s-no-gm?authuser=0');
+    background-image: url('https://4kwallpapers.com/images/walls/thumbs_3t/4409.jpg');
     /* Ensure it covers the entire screen */
-    background-size: cover;
+    background-size: 1980x1000;
     /* Center the image */
     background-position: center;
     /* Apply transparency */
@@ -18,13 +18,19 @@ html {
 
 /* Styling for the logo */
 .logo-container {
+    position: fixed;
+    top: -10px;
+    left: 920px;
     text-align: center;
-    margin-top: 10px; /* Adjust as needed */
-    margin-bottom: 10px; /* Adjust as needed */
+    margin-top: 0px; /* Adjust as needed */
+    margin-bottom: 0px;
+     
 }
 
-
 .logo {
+    position: fixed;
+    top: -10px;
+    left: 920px;
     font-family: 'Arial Black', sans-serif;
     font-size: 32px;
     color: red;
@@ -33,11 +39,28 @@ html {
     /* Add any additional styling here */
 }
 
+.logout {
+    position: fixed;
+    top: 02px;
+    right: 10px;
+    background-color: #333;
+    padding: 2px 2px;
+    border-radius: 5px;
+}
+
+.logout a {
+    font-size: 22px;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    color: #fff;
+}
 .container {
-    padding-top: 50px; /* Adding 'px' for the unit */
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    position: relative; /* You might need to adjust this based on your layout */
+    top: 30px; /* Adjust according to the height of your fixed tabs */
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: calc(100% - 30px); /* Adjust for the remaining space after tabs */
     align-content: flex-start;
     font-size: 12px;
     color: #333;
@@ -47,16 +70,15 @@ html {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 95%;
     background-color: #455a64;
     color: #fff;
-    padding: 1px 1px; /* Adjust the top and bottom padding */
+    padding: 1px 10px; /* Adjust the top and bottom padding */
     height: 30px;
     font-size: 13px; /* Modify the font size */
     border-bottom: 2px solid #37474f;
     z-index: 2;
 }
-
 
 #sku-results,
 #sortation-results {
@@ -70,7 +92,7 @@ html {
 
 .tabs ul {
     list-style-type: none;
-    padding: 0;
+    padding: 1;
     margin: 0;
     display: flex;
     flex-direction: row;
@@ -95,36 +117,12 @@ html {
     border-bottom: 2px solid #ffd54f;
 }
 
-
-.display-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    padding: 10px;
-}
-
 .content-box {
     border: 1px solid #ccc;
     background-color: #f5f5f5;
     padding: 10px;
     transition: all 0.3s ease;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* DB Connection Indicator */
-.db-connection-indicator {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 4px;
-    background-color: #4caf50;
-}
-
-.db-disconnected .db-connection-indicator {
-    background-color: #f44336;
 }
 
 #go-button {
@@ -136,7 +134,6 @@ html {
     background-color: #ff9800; /* Orange */
     color: white;
 }
-
 
 /* Processing Indicator */
 #processing-indicator {
@@ -268,11 +265,11 @@ th {
     background-color: #ff6e40;
 }
 
-.tab {
+.tab-content {
     display: none;
 }
 
-.tab.active {
+.tab-content.active {
     display: block;
 }
 
@@ -297,10 +294,10 @@ th {
     transition: all 0.3s ease;
 }
 
-
 #sku-results-container {
     position: relative;
 }
+
 .buttons-container-sku {
     display: flex;
     justify-content: flex-end;
@@ -311,13 +308,12 @@ th {
     padding: 1px;
     border-bottom: 1px solid #ccc;
 }
+
 .buttons-container-sku button.active,
 .buttons-container-sortation button.active {
     background-color: #ff6e40; /* Change to your preferred color */
     color: white;
 }
-
-
 
 .scrollable-table,
 #sku-results-container,
@@ -372,8 +368,6 @@ th {
     background-color: #fff;
     z-index: 1;
 }
-
-
 /* Enhance the appearance of buttons */
 button {
     padding: 8px 16px;
@@ -435,7 +429,7 @@ input[type="text"] {
     border-color: #ffc501;
 }
 
-.active-tab {
+.active {
     border-color: #ffc501;
     background-color: #546e7a;
 }

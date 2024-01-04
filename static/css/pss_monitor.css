@@ -1,0 +1,669 @@
+
+
+.pss-header {
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: bolder;
+}
+
+.flow-lines {
+  position:absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow:auto; /* Ensure lines stay within the container */
+}
+
+.flow-lines line {
+  stroke: #9E9E9E;
+  stroke-width: 3;
+}
+
+
+.PSS-Flow {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  border: 1px solid #ccc;
+}
+
+.circle,
+.triangle,
+.stack,
+.oval,
+.box,
+.pss-loop-circles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 5%;
+  height: 10%;
+  border: 2px solid #4CAF50;
+  background-color: #FFFFFF;
+  font-size: 14px;
+  font-weight: bolder;
+  position: relative; /* Change absolute to relative positioning */
+}
+
+
+.box {
+  width: 20%;
+  height: 18%;
+  border: 2px solid #2196F3;
+  background-color: #FFFFFF;
+  font-weight: bolder;
+  position: relative;
+}
+
+.rectangle {
+  width: 6%;
+  height: 5%;
+  border: 2px solid #FF9800;
+  background-color: #FFFFFF;
+  font-weight: bolder;
+  position: relative;
+}
+
+/* Adjust positions for symbols */
+.pss-induction {
+  position: absolute;
+  top: 1%;
+  left: 5%;
+}
+
+.pss-cj1 {
+  position: absolute;
+  top: 1%;
+  left: 15%;
+}
+
+.pss-buffer {
+  position: absolute;
+  top: 1%;
+  left: 30%;
+}
+
+.pss-cj2 {
+  position: absolute;
+  top: 1%;
+  left: 48%;
+}
+
+/* Add a class to pause the animation */
+.paused-animation {
+  animation-play-state: paused;
+}
+
+.gear-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 5%;
+  background-image: url('https://cdn.dribbble.com/users/4011649/screenshots/10677615/media/948d65ef147246f25e31d44b9a59e660.gif');
+  background-size: contain; /* or adjust based on your preference */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  animation-play-state: paused;
+  font-weight: bolder;
+  position: relative;
+}
+
+/* Adjust positioning for each gear icon */
+.pss-presort-1 {
+  position: absolute;
+  top: 16%;
+  left: 14.2%;
+}
+
+.pss-presort-2 {
+  position: absolute;
+  top: 14%;
+  left: 49.2%;
+}
+
+.pss-presort-3 {
+  position: absolute;
+  top: 16%;
+  left: 84%;
+}
+
+
+.pss-presort-lanes-1 {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+    
+}
+
+.pss-presort-lanes-2 {
+  position: absolute;
+  top: 25%;
+  left: 40%;
+  
+}
+
+.pss-presort-lanes-3 {
+  position: absolute;
+  top: 25%;
+  left: 73%;
+  
+}
+
+
+.pss-matrix-1 {
+  position: absolute;
+  top: 50%;
+  left: 12.5%;
+  
+}
+
+.pss-matrix-2 {
+  position: absolute;
+  top: 50%;
+  left:53%;
+}
+
+.pss-matrix-3 {
+  position: absolute;
+  top: 50%;
+  left: 83.2%;
+}
+
+.pss-STATIONS_PAC1 {
+  position: absolute;
+  top: 75%;
+  left: 01%;
+}
+
+.pss-STATIONS_PAC2 {
+  position: absolute;
+  top: 75%;
+  left: 13%;
+}
+
+.pss-STATIONS_PAC3{
+  position: absolute;
+  top: 75%;
+  left: 61%;
+}
+
+.pss-STATIONS_PAC4 {
+  position: absolute;
+  top: 75%;
+  left: 85%;
+}
+
+.pss-STATIONS_PAC5 {
+  position: absolute;
+  top: 75%;
+  left: 28%;
+}
+
+.pss-STATIONS_PAC6 {
+  position: absolute;
+  top: 75%;
+  left:42%;
+}
+
+.pss-BUFFER_EMPTY {
+  position: absolute;
+  top: 1%;
+  left: 60%;
+}
+
+.pss-TOTAL {
+  position: absolute;
+  top: 1%;
+  left: 68%;
+  font-weight: bolder;
+  font-size: 18;
+}
+
+/* Updated CSS */
+/* Define a common style for the oval */
+.oval {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: url('https://sp-ao.shortpixel.ai/client/q_glossy,ret_img///i0.wp.com/irp-intralogistica.com/wp-content/uploads/2018/11/Transportadora.gif');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  animation-play-state: paused;
+}
+
+/* Position the text above the oval */
+.oval::before {
+  content: attr(data-label); /* Display data-label attribute content */
+  display: block;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-10%);
+  font-weight: bold;
+  color:black;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Additional styles for each LOOP_PAC circle */
+.pss-loop-pac-1::before {
+  content: "LOOP_PAC 1"; /* Display LOOP_PAC followed by the number */
+}
+
+.pss-loop-pac-2::before {
+  content: "LOOP_PAC 2";
+}
+
+.pss-loop-pac-3::before {
+  content: "LOOP_PAC 3";
+}
+
+.pss-loop-pac-4::before {
+  content: "LOOP_PAC 4";
+}
+
+.pss-loop-pac-5::before {
+  content: "LOOP_PAC 5";
+}
+
+.pss-loop-pac-6::before {
+  content: "LOOP_PAC 6";
+}
+
+.pss-loop-pac-1 {
+  position: absolute;
+  top: 60%;
+  left: 1%;
+  /* Additional styles for LOOP_PAC1 circle */
+}
+
+.pss-loop-pac-2 {
+  position: absolute;
+  top: 60%;
+  left: 12%;
+  /* Additional styles for LOOP_PAC2 circle */
+}
+
+.pss-loop-pac-3 {
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  /* Additional styles for LOOP_PAC3 circle */
+}
+
+.pss-loop-pac-4 {
+  position: absolute;
+  top: 60%;
+  left: 83.7%;
+  /* Additional styles for LOOP_PAC4 circle */
+}
+
+.pss-loop-pac-5 {
+  position: absolute;
+  top: 60%;
+  left: 27%;
+  /* Additional styles for LOOP_PAC5 circle */
+}
+
+.pss-loop-pac-6 {
+  position: absolute;
+  top: 60%;
+  left: 42%;
+  /* Additional styles for LOOP_PAC6 circle */
+}
+
+.line1 {
+  position: absolute;
+  top: 30%;
+  left: 11%;
+  width: 4%;
+}
+
+.line2 {
+  position: absolute;
+  top: 3%;
+  left: 18%;
+  width: 12%;
+}
+
+.line3 {
+  position: absolute;
+  top: 1%;
+  left: 30%;
+  width: 15%;
+}
+
+.line4 {
+  position: absolute;
+  top: 1%;
+  left: 50%;
+  width: 35%;
+}
+
+.line5 {
+  position: absolute;
+  top: 20%;
+  left: 15%;
+  width: 0;
+  height: 50%;
+}
+
+.line6 {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 0;
+  height: 50%;
+}
+
+.line7 {
+  position: absolute;
+  top: 20%;
+  left: 85%;
+  width: 0;
+  height: 50%;
+}
+
+.line8 {
+  position: absolute;
+  top: 70%;
+  left: 15%;
+  width: 0;
+  height: 25%;
+}
+
+.line9 {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  width: 0;
+  height: 25%;
+}
+
+.line10 {
+  position: absolute;
+  top: 70%;
+  left: 85%;
+  width: 0;
+  height: 25%;
+}
+
+.line11 {
+  position: absolute;
+  top: 95%;
+  left: 1%;
+  width: 9%;
+}
+
+.line12 {
+  position: absolute;
+  top: 95%;
+  left: 50%;
+  width: 9%;
+}
+
+.line13 {
+  position: absolute;
+  top: 95%;
+  left: 99%;
+  width: 1%;
+}
+
+.line14 {
+  position: absolute;
+  top: 95%;
+  left: 10%;
+  width: 1%;
+}
+
+.line15 {
+  position: absolute;
+  top: 95%;
+  left: 90%;
+  width: 1%;
+}
+
+.line16 {
+  position: absolute;
+  top: 95%;
+  left: 20%;
+  width: 1%;
+}
+
+.line17 {
+  position: absolute;
+  top: 95%;
+  left: 80%;
+  width: 1%;
+}
+
+.dynamic-play {
+  position: absolute;
+  top: 4%;
+  left: 83%;
+  width: 100px;
+  height: 40px;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 24px; /* Adjust font size if needed */
+}
+
+.dynamic-play:hover {
+  background-color: #ccc;
+}
+
+#pssPlayBtn::before {
+  content: "\25B6"; /* Unicode character for Play symbol */
+}
+
+.paused::before {
+  content: "\23F8"; /* Use the Pause symbol for the paused state */
+}
+
+/* Style for the dropdown */
+#intervalSelect {
+  position: absolute;
+  top: 4.2%;
+  left: 90%;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px; /* Adjust margin as needed */
+}
+
+/* Style for dropdown options */
+#intervalSelect option {
+  font-size: 16px;
+  background-color: #fff;
+  color: #000;
+}
+
+.display-board {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Common style for display items */
+.display-item {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #FFFFFF;
+  border-radius: 10px;
+  padding: 2px 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 50px;
+  text-align: center;
+  height: 18px;
+  background-color: #9C27B0;
+}
+
+/* Positioning for each display item */
+.LED-INDUCTION {
+  position: absolute;
+  top: 8%;
+  left: 6%;
+}
+
+.LED-CJ1 {
+  position: absolute;
+  top: 8%;
+  left: 16%;
+}
+
+.LED-BUFFER_NOT_EMPTY {
+  position: absolute;
+  top: 8%;
+  left: 31%;
+}
+
+/* Row 2 */
+.LED-EMPTY_BUFFER {
+  position: absolute;
+  top: 4%;
+  left: 62%;
+}
+
+.LED-CJ2 {
+  position: absolute;
+  top: 8%;
+  left: 49%;
+}
+
+.LED-PRES_1 {
+  position: absolute;
+  top: 21%;
+  left: 10%;
+}
+
+/* Row 3 */
+.LED-PRES_2 {
+  position: absolute;
+  top: 21%;
+  left: 45%;
+}
+
+.LED-PRES_3 {
+  position: absolute;
+  top: 21%;
+  left: 89%;
+}
+
+.LED-MATRIX1 {
+  position: absolute;
+  top: 53%;
+  left: 14%;
+}
+
+/* Row 4 */
+.LED-MATRIX2 {
+  position: absolute;
+  top: 53%;
+  left: 55%;
+}
+
+.LED-MATRIX3 {
+  position: absolute;
+  top: 53%;
+  left: 85%;
+}
+
+.LED-LOOP_PAC1 {
+  position: absolute;
+  top: 67%;
+  left:3%;
+}
+
+/* Row 5 */
+.LED-LOOP_PAC2 {
+  position: absolute;
+  top: 67%;
+  left: 15%;
+}
+
+.LED-LOOP_PAC3 {
+  position: absolute;
+  top: 67%;
+  left: 62%;
+}
+
+.LED-LOOP_PAC4 {
+  position: absolute;
+  top: 67%;
+  left: 86%;
+}
+
+/* Row 6 */
+.LED-LOOP_PAC5 {
+  position: absolute;
+  top: 67%;
+  left: 30%;
+}
+
+.LED-LOOP_PAC6 {
+  position: absolute;
+  top: 67%;
+  left: 44%;
+}
+
+/* Row 7 */
+.LED-STATIONS_PAC3 {
+  position: absolute;
+  top: 78%;
+  left: 62.5%;
+}
+
+.LED-STATIONS_PAC4 {
+  position: absolute;
+  top: 78%;
+  left: 86%;
+}
+
+.LED-STATIONS_PAC1 {
+  position: absolute;
+  top: 78%;
+  left: 2%;
+}
+
+/* Row 8 */
+.LED-STATIONS_PAC2 {
+  position: absolute;
+  top: 78%;
+  left: 15%;
+}
+
+.LED-STATIONS_PAC5 {
+  position: absolute;
+  top: 78%;
+  left: 30%;
+}
+
+.LED-STATIONS_PAC6 {
+  position: absolute;
+  top: 78%;
+  left: 44%;
+}
+
+/* Row 9 */
+.LED-TOTAL {
+  position: absolute;
+  top: 4%;
+  left: 69%;
+}

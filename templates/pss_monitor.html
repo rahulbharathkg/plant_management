@@ -1,0 +1,173 @@
+<div class="pss-container">
+    <div class="pss-header">PSS Flow</div>
+    <!-- Sample HTML structure for GIFs -->
+    <div class="PSS-Flow">
+        <div class="circle pss-induction">Induction</div>
+        <div class="circle pss-cj1">CJ1</div>
+        <div class="circle pss-buffer">Buffer</div>
+        <div class="circle pss-cj2">CJ2</div>
+        <div class="pss-presort-1">
+            <div class="gear-icon"></div>
+            <p class="pss-presort-label">Presort 1</p>
+        </div>
+        
+        <div class="pss-presort-2">
+            <div class="gear-icon"></div>
+            <p class="pss-presort-label">Presort 2</p>
+        </div>
+        
+        <div class="pss-presort-3">
+            <div class="gear-icon"></div>
+            <p class="pss-presort-label">Presort 3</p>
+        </div>
+        <svg class="flow-lines">
+            <line class="line1" x1="10%" y1="5%" x2="15%" y2="5%" />
+            <line class="line2" x1="20.2%" y1="5%" x2="30.2%" y2="5%" />
+            <line class="line3" x1="35.2%" y1="5%" x2="48.2%" y2="5%" />
+            <!-- 3 split lines -->
+            <line class="line4" x1="51%" y1="12%" x2="15%" y2="20%" />
+            <line class="line5" x1="51%" y1="12%" x2="51%" y2="20%" />
+            <line class="line6" x1="51%" y1="12%" x2="85%" y2="20%" />
+            <!-- 3 straight lines -->
+            <line class="line7" x1="15%" y1="20%" x2="15%" y2="66.3%" />
+            <line class="line8" x1="51%" y1="20%" x2="51%" y2="53%" />
+            <line class="line9" x1="85%" y1="20%" x2="85%" y2="66.3%" />
+            <!-- 3 L-horizontal connection -->
+            <line class="line10" x1="15%" y1="66.3%" x2="15%" y2="66.3%" />
+            <line class="line11" x1="51%" y1="53%" x2="55%" y2="53%" />
+            <line class="line12" x1="85%" y1="66%" x2="85%" y2="66.3%" />
+            <!-- loop split connections -->
+            <line class="line13" x1="15%" y1="58%" x2="5%" y2="66.3%" />
+            <line class="line14" x1="15%" y1="58%" x2="31%" y2="66.3%" />
+            <line class="line15" x1="15%" y1="58%" x2="46%" y2="66.3%" />
+            <line class="line16" x1="56%" y1="55%" x2="63%" y2="66.3%" />
+        </svg>
+            
+        <!-- presorter lane -->
+        <div class="box pss-presort-lanes-1">
+            
+            <table class="presortlane-table">
+                <!-- Table headers -->
+                <thead>
+                    <tr>
+                        <th>Presort Lane</th>
+                        <th>To Fill</th>
+                        <th>Lock Status</th>
+                        <th>Operation Status</th>
+                        <th>Fill Time</th>
+                        <th>Became Full Time</th>
+                    </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                    <!-- Rows and Cells will be dynamically generated here -->
+                </tbody>
+            </table>
+        </div>
+        <div class="box pss-presort-lanes-2">
+            
+            <table class="presortlane-table">
+                <!-- Table headers -->
+                <thead>
+                    <tr>
+                        <th>Presort Lane</th>
+                        <th>To Fill</th>
+                        <th>Lock Status</th>
+                        <th>Operation Status</th>
+                        <th>Fill Time</th>
+                        <th>Became Full Time</th>
+                    </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                    <!-- Rows and Cells will be dynamically generated here -->
+                </tbody>
+            </table>
+        </div>
+        <div class="box pss-presort-lanes-3">
+            
+            <table class="presortlane-table">
+                <!-- Table headers -->
+                <thead>
+                    <tr>
+                        <th>Presort Lane</th>
+                        <th>To Fill</th>
+                        <th>Lock Status</th>
+                        <th>Operation Status</th>
+                        <th>Fill Time</th>
+                        <th>Became Full Time</th>
+                    </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                    <!-- Rows and Cells will be dynamically generated here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="rectangle pss-matrix-1">Matrix 1</div>
+        <div class="rectangle pss-matrix-2">Matrix 2</div>
+        <div class="rectangle pss-matrix-3">Matrix 3</div>
+
+        <div class="rectangle pss-BUFFER_EMPTY">EMPTY-BUFFER</div>
+        <div class="rectangle pss-TOTAL">TOTAL</div>
+
+        <div class="rectangle pss-STATIONS_PAC1">STATIONS_PAC1</div>
+        <div class="rectangle pss-STATIONS_PAC2">STATIONS_PAC2</div>
+        <div class="rectangle pss-STATIONS_PAC3">STATIONS_PAC3</div>
+        <div class="rectangle pss-STATIONS_PAC4">STATIONS_PAC4</div>
+        <div class="rectangle pss-STATIONS_PAC5">STATIONS_PAC5</div>
+        <div class="rectangle pss-STATIONS_PAC6">STATIONS_PAC6</div>
+                
+        <div class="pss-loop-circles">
+            <div class="oval pss-loop-pac-1" data-label="LOOP_PAC 1"></div>
+            <div class="oval pss-loop-pac-2" data-label="LOOP_PAC 2"></div>
+            <div class="oval pss-loop-pac-3" data-label="LOOP_PAC 3"></div>
+            <div class="oval pss-loop-pac-4" data-label="LOOP_PAC 4"></div>
+            <div class="oval pss-loop-pac-5" data-label="LOOP_PAC 5"></div>
+            <div class="oval pss-loop-pac-6" data-label="LOOP_PAC 6"></div>
+          </div>
+          <div class="display-board">
+            <!-- Display items -->
+            <div class="display-item LED-INDUCTION">0000</div>
+            <div class="display-item LED-CJ1">0000</div>
+            <div class="display-item LED-BUFFER_NOT_EMPTY">0000</div>
+            <div class="display-item LED-EMPTY_BUFFER">0000</div>
+            <div class="display-item LED-CJ2">0000</div>
+            <div class="display-item LED-PRES_1">0000</div>
+            <div class="display-item LED-PRES_2">0000</div>
+            <div class="display-item LED-PRES_3">0000</div>
+            <div class="display-item LED-MATRIX1">0000</div>
+            <div class="display-item LED-MATRIX2">0000</div>
+            <div class="display-item LED-MATRIX3">0000</div>
+            <div class="display-item LED-LOOP_PAC1">0000</div>
+            <div class="display-item LED-LOOP_PAC2">0000</div>
+            <div class="display-item LED-LOOP_PAC3">0000</div>
+            <div class="display-item LED-LOOP_PAC4">0000</div>
+            <div class="display-item LED-LOOP_PAC5">0000</div>
+            <div class="display-item LED-LOOP_PAC6">0000</div>
+            <div class="display-item LED-STATIONS_PAC3">0000</div>
+            <div class="display-item LED-STATIONS_PAC4">0000</div>
+            <div class="display-item LED-STATIONS_PAC1">0000</div>
+            <div class="display-item LED-STATIONS_PAC2">0000</div>
+            <div class="display-item LED-STATIONS_PAC5">0000</div>
+            <div class="display-item LED-STATIONS_PAC6">0000</div>
+            <div class="display-item LED-TOTAL">0000</div>
+          </div>
+          
+          
+        
+    </div>
+    <!-- Add this to your HTML file -->
+    <select id="intervalSelect">
+        <option value="5000">5 seconds</option>
+        <option value="15000">15 seconds</option>
+        <option value="60000">1 minute</option>
+        <option value="600000">10 minutes</option>
+        <option value="1800000">30 minutes</option>
+      </select>
+      
+  <button class="dynamic-play paused" id="pssPlayBtn"></button>
+   
+
+</div>

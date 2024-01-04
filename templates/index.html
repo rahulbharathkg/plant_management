@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>RB-Tool</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bulk.css') }}">
-    <!-- Add jQuery and DataTables CDN links -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pss_monitor.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loadunit.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery.colresizable/1.6/jquery.colResizable.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 </head>
+
 <body>
-    
     <div class="background-overlay"></div>
     <div class="container">
-    <div class="tabs">
-        <ul>
-            <li class="active" id="tab1">Order Check</li>
-            <li id="tab2">LoadUnit Check</li>
-            <li id="tab3">Bulk OrdersCheck</li>
-            <header>
-                <h1 class="logo">RIQ</h1>
-            </header>
-        </ul>
-    </div>
+        <div class="tabs">
+            <ul>
+                <li class="tab-button" onclick="showTabContent('order-check-content')">Order Check</li>
+                <li class="tab-button" onclick="showTabContent('loadunit-check-content')">LoadUnit Check</li>
+                <li class="tab-button" onclick="showTabContent('bulk-orders-content')">Bulk Orders</li>
+                <li class="tab-button" onclick="showTabContent('pss-monitor-content')">PSS Monitor</li>
+                <header>
+                    <li><a href="#" class="logo">RIQ</a></li>
+                    <div class="logout">
+                        <a href="/logout">Logout</a>
+                    </div>
+                    
+                </header>
+                
+            </ul>
+        </div>
 
-    <div class="display-area" id="display-area-1">
-        <div class="tab-content tab active" id="order-check-content">
-            <div class="indicator-container">
-                <div class="indicator green" id="connection-indicator"></div>
-                <span id="connection-status">DB connected</span>
-            </div>
-            <div class="content-box">
+      
+            <div class="tab-content" id="order-check-content">
+                <div class="content-box">
                 <label for="order-id">Enter Order No:</label>
                 <input type="text" id="order-id">
                 <button id="go-button">Go</button>
@@ -51,6 +55,7 @@
                                     <th>Status</th>
                                     <th>Create Date</th>
                                     <th>Mod Date</th>
+                                    <th>TARGET_DATE</th>
                                     <th>Sortation Order ID</th>
                                 </tr>
                             </thead>
@@ -129,10 +134,10 @@
                                     <th class="resizable-column">pouchable</th>
                                     <th>SKU</th>
                                     
-                                    <th>Country</th>
-                                    <th>Quality</th>
-                                    <th>Company</th>
-                                    <th>Quantity</th>
+                                    <th>CN</th>
+                                    <th>QL</th>
+                                    <th>CP</th>
+                                    <th>Qty</th>
                                     <th>Qty Free</th>
                                     <th>Availability Status</th>
                                     <th class="resizable-column">Location</th>
@@ -184,6 +189,11 @@
                                     <th class="resizable-column">Location</th>
                                     <th class="resizable-column">ARR_TIME</th>
                                     <th>SKU</th>
+                                    <th>ERR</th>
+                                    <th>CP</th>
+                                    <th>CN</th>
+                                    <th>QL</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -210,30 +220,41 @@
                     </div>
             </div>
         </div>
-    <div class="display-area" id="display-area-2"> <!-- This is where the new tab content will reside -->
-        <!-- Content for LoadUnit Check tab -->
-        <div class="tab-content tab active" id="loadunit-check-content" style="display: none;">
-            <!-- ... (content specific to LoadUnit Check tab) ... -->
-        </div>
-    
+    </div>
 
-    <div class="display-area" id="display-area-3">
-        <div class="tab-content tab" id="bulk-orders-content">
-        <!-- Content for Bulk Orders tab -->
-        {% include 'bulk_orders.html' %}
+        <div>
+            <div class="tab-content" id="loadunit-check-content">
+                {% include 'loadunit.html' %}
+            </div>
+            
         </div>
-</div>
-</div>
-</div>    
-<script src="{{ url_for('static', filename='js/bulk.js') }}"></script>
-<script src="{{ url_for('static', filename='js/alarmdetails-functions.js') }}"></script>
-<script src="{{ url_for('static', filename='js/sku-functions.js') }}"></script>
-<script src="{{ url_for('static', filename='js/analysedata-functions.js') }}"></script>
-<script src="{{ url_for('static', filename='js/execute-queries.js') }}"></script>
-<script src="{{ url_for('static', filename='js/table-operations.js') }}"></script>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
+        <div>
+            <div class="tab-content" id="bulk-orders-content">
+                {% include 'bulk_orders.html' %}
+            </div>
+            <div id="processing-indicator" class="hidden">Processing...</div>
+        </div>
+        
+
+        
+            <div class="tab-content" id="pss-monitor-content">
+                {% include 'pss_monitor.html' %}
+            </div>
+            <div id="processing-indicator" class="hidden">Processing...</div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bulk.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/alarmdetails-functions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sku-functions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analysedata-functions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/execute-queries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/table-operations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pss_monitor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loadunitcontent.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
-    </body>
-    
-    </html>
+</body>
+
+</html>

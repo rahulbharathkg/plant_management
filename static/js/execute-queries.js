@@ -47,12 +47,14 @@ function updateStatus(status) {
 
     if (status.length > 0) {
         status.forEach(item => {
-            statusHTML += `<tr><td>${item.STATUS}</td><td>${item.F_CREATE_DATE}</td><td>${item.F_MOD_DATE}</td><td>${item.SORTATION_ORDER_ID}</td></tr>`;
+            statusHTML += `<tr><td>${item.STATUS}</td><td>${item.F_CREATE_DATE}</td><td>${item.F_MOD_DATE}</td><td>${item.F_PACK_TARGET}</td><td>${item.SORTATION_ORDER_ID}</td></tr>`;
         });
     }
    
     statusTable.innerHTML = statusHTML;
+    console.log('Status Data:', status);
 }
+
 
 function displayOrderDetails(orderDetails) {
     const orderDetailsTable = document.getElementById('order-details-table').querySelector('tbody');

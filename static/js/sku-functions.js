@@ -33,16 +33,18 @@ function showSkuResults(sku) {
                     data: data.INV_RESULTS,
                     columns: [
                         { title: 'SKU' },
-                        { title: 'Country' },
-                        { title: 'Quality' },
-                        { title: 'Company' },
-                        { title: 'Quantity' },
+                        { title: 'CN' },
+                        { title: 'QL' },
+                        { title: 'CP' },
+                        { title: 'QTY' },
                         { title: 'Qty_free' },
                         { title: 'Avl_Status' },
                         { title: 'Location' },
                         { title: 'Pouch' }
                     ]
                 });
+                // Call the function to color SKU rows based on conditions
+                colorSKUConditions();
             }
 
             // Display Sortation Results
@@ -55,9 +57,15 @@ function showSkuResults(sku) {
                         { title: 'VAS Type' },
                         { title: 'Location' },
                         { title: 'Arrival Time' },
-                        { title: 'SKU' }
+                        { title: 'SKU' },
+                        { title: 'ERR' },
+                        { title: 'CP' },
+                        { title: 'CN' },
+                        { title: 'QL' }
                     ]
                 });
+                // Call the function to color Sortation rows based on conditions
+        colorSortationConditions();
             }
 
             // Show the SKU and Sortation results tables
@@ -116,3 +124,60 @@ function clearSortationFilter() {
 
 
 
+function colorSKUConditions() {
+    const skuResultsTableRows = document.querySelectorAll('#sku-results-table tbody tr');
+    const orderDetailsTableRows = document.querySelectorAll('#order-details-table tbody tr');
+
+    skuResultsTableRows.forEach(skuRow => {
+        const sku = skuRow.cells[0].textContent.trim(); // Assuming SKU is in the first column
+
+        orderDetailsTableRows.forEach(orderDetailRow => {
+            const skuColumn = orderDetailRow.cells[1]; // Assuming SKU is in the second column
+            const countryColumn = orderDetailRow.cells[3]; // Assuming Country is in the fourth column
+            const qualityColumn = orderDetailRow.cells[4]; // Assuming Quality is in the fifth column
+            const companyColumn = orderDetailRow.cells[2]; // Assuming Company is in the third column
+
+            if (skuColumn.textContent.trim() === sku) {
+                const pouchablesColumn = skuRow.cells[8]; // Assuming Pouchables column is in the ninth column
+
+                // Conditions for coloring
+                if (pouchablesColumn.textContent.trim() === 'NO') {
+                    skuRow.style.backgroundColor = 'red'; // Make row light red
+                } else if (
+                    countryColumn.textContent.trim() !== skuRow.cells[1].textContent.trim() ||
+                    qualityColumn.textContent.trim() !== skuRow.cells[2].textContent.trim() ||
+                    companyColumn.textContent.trim() !== skuRow.cells[3].textContent.trim()
+                ) {
+                    skuRow.style.backgroundColor = 'orange'; // Make row light orange
+                }
+            }
+        });
+    });
+}
+
+
+function colorSortationConditions() {
+    const sortationTable = $('#sortation-results-table').DataTable();
+    const rows = sortationTable.rows().nodes();
+
+    $(rows).each(function () {
+        const cells = $(this).find('td');
+
+        // Get the cell values for the columns you want to apply conditions on
+        const errValue = cells.eq(6).text().trim(); // Assuming ERR column is at index 6
+
+        // Apply conditions for ERR column
+        if (errValue !== 'OK') {
+            $(this).css('background-color', 'lightcoral'); // Red color for non-OK values in ERR column
+        }
+    });
+}
+// Event handler for DataTables redraw event
+$('#sortation-results-table').on('draw.dt', function () {
+    colorSortationConditions(); // Apply coloring on each redraw
+});
+
+// Event handler for DataTables redraw event
+$('#sku-results-table').on('draw.dt', function () {
+    colorSKUConditions(); // Apply coloring on each redraw
+});
