@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://127.0.0.1:8080/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>RB-Tool</title>
+    <style>
+        /* Updated CSS based on the example */
+        body {
+            display: flex;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            font-size: 12px;
+            margin: 0;
+        }
+        
+        .tabs {
+            background-color: #3c4252;
+            color: #fff;
+        }
+        
+        .tabs ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex; /* Changed */
+            flex-direction: row; /* Changed */
+            justify-content: flex-start; /* Align tabs from left to right */
+            align-items: center; /* Center align items vertically */
+        }
+        
+        .tabs li {
+            cursor: pointer;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+            margin-right: 10px; /* Add some space between tabs */
+        }
+        
+        .tabs li.active {
+            background-color: #ffc501;
+        }
+        
+        .display-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        
+        /* Table styles */
+/* Ensure tables are responsive */
+#sku-results-table,
+#sortation-results-table {
+    width: 100%;
+    table-layout: auto;
+}
+
+#sku-results-container,
+#sortation-results-container {
+    max-height: unset;
+    overflow-y: unset;
+}
+
+/* Adjust table styles */
+#sku-results-table,
+#sortation-results-table {
+    table-layout: auto;
+}
+
+/* Additional CSS for table headers */
+#sku-results-table thead,
+#sortation-results-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+}
+
+        .content-box {
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            padding: 20px;
+        }
+        
+        .indicator-container {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            z-index: 2;
+        }
+        
+        .indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        
+        .green {
+            background-color: green;
+        }
+        
+        .red {
+            background-color: red;
+        }
+        
+        #processing-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: 5px;
+            z-index: 3;
+            display: none;
+        }
+        
+        table {
+            width: auto; /* Set the table width to auto */
+            table-layout: auto; /* Allow the columns to adjust their width based on content */
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .sku-link {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+        
+        /* CSS styles for SKU and Sortation tables */
+    #sku-results-table,
+    #sortation-results-table {
+        width: 100%;
+        table-layout: auto;
+    }
+
+    #sku-results-container,
+    #sortation-results-container {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    /* Make table headers fixed */
+    #sku-results-table thead,
+    #sortation-results-table thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #fff;
+    }
+        #status-container,
+        #order-details-container,
+        #check-alarm-results,
+        #sku-results,
+        #sortation-results {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        #status-container table,
+        #order-details-container table,
+        #check-alarm-results table,
+        #sku-results table,
+        #sortation-results table {
+            max-width: 100%;
+            overflow-x: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+        /* Additional styles for the Analyse button */
+        .analyse-button {
+            background-color: #ff4444;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }    
+        .tab {
+            display: none;
+        }
+
+        .tab.active {
+            display: block;
+        }
+        /* CSS for table containers */
+.tables-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.table-wrapper {
+    flex: 1 1 calc(50% - 15px); /* Adjust the width to occupy 50% of the container with a gap */
+    overflow: hidden; /* Hide any overflow */
+    border-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.scrollable-table {
+    max-height: 300px; /* Set a specific max-height for scrollable tables */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    border: 1px solid #ccc; /* Include border for clarity */
+    margin-bottom: 15px; /* Add some margin for spacing */
+}
+
+/* Ensure tables are responsive */
+.table-wrapper table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}
+/* CSS for table containers */
+#sku-results-container,
+#sortation-results-container {
+    max-height: unset; /* Remove explicit max-height */
+    overflow-y: unset; /* Remove explicit overflow-y */
+}
+
+/* Adjust table styles */
+#sku-results-table,
+#sortation-results-table {
+    width: 100%;
+    table-layout: fixed; /* Allow columns to adjust based on content */
+}
+
+#sku-results-container,
+#sortation-results-container {
+    max-height: 300px; /* Set a specific max-height for scrollable tables */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    border: 1px solid #ccc; /* Include border for clarity */
+    margin-bottom: 15px; /* Add some margin for spacing */
+}
+
+   
+    </style>
+
+    <!-- Add jQuery and DataTables CDN links -->
+    <script src="./RB-Tool_files/jquery-3.6.0.min.js.download"></script>
+<script src="./RB-Tool_files/jquery.dataTables.min.js.download"></script>
+<script src="./RB-Tool_files/jquery.colResizable.min.js.download"></script>
+<link rel="stylesheet" href="./RB-Tool_files/jquery.dataTables.min.css">
+
+</head>
+
+<body>
+    <div class="container">
+    <div class="tabs">
+        <ul>
+            <li class="active" id="tab1">Order Check</li>
+            <li id="tab2">LoadUnit Check</li>
+            <!-- Add more tabs if needed -->
+        </ul>
+    </div>
+
+    <div class="display-area" id="display-area-1">
+        <div class="tab-content tab active" id="order-check-content">
+            <div class="indicator-container">
+                <div class="indicator green" id="connection-indicator"></div>
+                <span id="connection-status">DB connected</span>
+            </div>
+            <div class="content-box">
+                <label for="order-id">Enter Order No:</label>
+                <input type="text" id="order-id">
+                <button id="go-button">Go</button>
+                <button id="check-alarm-button">CHECK_ALARM</button>
+                <button class="analyse-button" onclick="analyseData()">Analyse</button>
+                <div class="tables-container">
+                    <div class="table-wrapper" id="status-container">
+                    <h2>Status Results</h2>
+                    <table id="status-table">
+                        <!-- Status table content -->
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Create Date</th>
+                                <th>Mod Date</th>
+                                <th>Sortation Order ID</th>
+                            </tr>
+                        </thead>
+                        <tbody><tr><td>RELEASED</td><td>17-NOV-23 07.48 AM</td><td>17-NOV-23 03.12 PM</td><td>0015527843</td></tr></tbody>
+                    </table>
+                </div>
+                
+                <div class="table-wrapper" id="sku-results" style="display: block;">
+                    <h2>SKU Results</h2>
+                    <div class="scrollable-table">
+                        <div id="sku-results-table_wrapper" class="dataTables_wrapper no-footer"><div class="dataTables_length" id="sku-results-table_length"><label>Show <select name="sku-results-table_length" aria-controls="sku-results-table" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div><div id="sku-results-table_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="sku-results-table"></label></div><table id="sku-results-table" class="dataTable no-footer" aria-describedby="sku-results-table_info">
+                            <!-- SKU Results table content -->
+                            <thead>
+                                <tr><th class="sorting sorting_asc" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="SKU: activate to sort column descending" style="width: 7.15625px;">SKU</th><th class="resizable-column sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="pouchable: activate to sort column ascending" style="width: 7.15625px;">pouchable</th><th class="sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Country: activate to sort column ascending" style="width: 7.15625px;">Country</th><th class="sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Quality: activate to sort column ascending" style="width: 7.15625px;">Quality</th><th class="sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 7.15625px;">Company</th><th class="sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Quantity: activate to sort column ascending" style="width: 7.15625px;">Quantity</th><th class="sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Quantity Free: activate to sort column ascending" style="width: 7.15625px;">Quantity Free</th><th class="sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Availability Status: activate to sort column ascending" style="width: 7.15625px;">Availability Status</th><th class="resizable-column sorting" tabindex="0" aria-controls="sku-results-table" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending" style="width: 7.25px;">Location</th></tr>
+                            </thead>
+                            <tbody><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.10.20.MS10108920</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.05.18.MS05102118</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.05.01.MS05102301</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.30.07.MS30106407</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.11.18.MS11205618</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.09.16.MS09106516</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.12.04.MS12112904</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.17.12.MS17101712</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.19.01.MS19110801</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.16.07.MS16208107</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.09.03.MS09106703</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.06.13.MS06209213</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.19.04.MS19209204</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.13.12.MS13206312</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.21.20.MS21200820</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.04.08.MS04106508</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.18.01.MS18106401</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.01.09.MS01101409</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.08.12.MS08107712</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.01.01.MS01108101</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.13.19.MS13111619</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.05.07.MS05106807</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.17.15.MS17114015</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>0</td><td>RESERVED</td><td>KERING.PST.0.0.STEL010001</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.01.07.MS01205907</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>3</td><td>3</td><td>FREE</td><td>KERING.DMS_INV.31.08.MS31110908</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.13.10.MS13109210</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.05.14.MS05212114</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.10.07.MS10107507</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>2</td><td>2</td><td>FREE</td><td>KERING.DMS_INV.11.03.MS11114203</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.13.09.MS13212009</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>1</td><td>FREE</td><td>KERING.DMS_INV.17.02.MS17210202</td></tr><tr><td>KER#8132902276</td><td>YES</td><td>IT</td><td>1ST</td><td>BVG</td><td>1</td><td>0</td><td>RESERVED</td><td>KERING.PST.0.0.STBA010001</td></tr></tbody>
+                        </table><div class="dataTables_info" id="sku-results-table_info" role="status" aria-live="polite">Showing 0 to 0 of 0 entries</div><div class="dataTables_paginate paging_simple_numbers" id="sku-results-table_paginate"><a class="paginate_button previous disabled" aria-controls="sku-results-table" data-dt-idx="0" tabindex="-1" id="sku-results-table_previous">Previous</a><span></span><a class="paginate_button next disabled" aria-controls="sku-results-table" data-dt-idx="1" tabindex="-1" id="sku-results-table_next">Next</a></div></div>
+                    </div>
+                </div>
+                <div class="table-wrapper" id="order-details-container">
+                    <h2>Order Details Results</h2>
+                    <table id="order-details-table">
+                        <!-- Order details table content -->
+                        <thead>
+                            <tr>
+                                <th>Order Line ID</th>
+                                <th>SKU</th>
+                                <th>Company</th>
+                                <th>Country</th>
+                                <th>Quality</th>
+                                <th>Quantity</th>
+                                <th>Required VAS</th>
+                            </tr>
+                        </thead>
+                        <tbody><tr><td>230000007832712</td><td class="sku-link" onclick="showSkuResults(&#39;KER#8132380300&#39;)">KER#8132380300</td><td>BVG</td><td>IT</td><td>1ST</td><td>7</td><td>null</td></tr><tr><td>230000007832975</td><td class="sku-link" onclick="showSkuResults(&#39;KER#8132485977&#39;)">KER#8132485977</td><td>BVG</td><td>IT</td><td>1ST</td><td>1</td><td>null</td></tr><tr><td>230000007837100</td><td class="sku-link" onclick="showSkuResults(&#39;KER#8132902276&#39;)">KER#8132902276</td><td>BVG</td><td>IT</td><td>1ST</td><td>1</td><td>null</td></tr></tbody>
+                    </table>
+                </div>
+                <div class="table-wrapper" id="sortation-results" style="display: block;">
+                    <h2>Sortation Results</h2>
+                    <div class="scrollable-table">
+                        <div id="sortation-results-table_wrapper" class="dataTables_wrapper no-footer"><div class="dataTables_length" id="sortation-results-table_length"><label>Show <select name="sortation-results-table_length" aria-controls="sortation-results-table" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div><div id="sortation-results-table_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="sortation-results-table"></label></div><table id="sortation-results-table" class="dataTable no-footer" aria-describedby="sortation-results-table_info">
+                            <!-- Sortation Results table content -->
+                            <thead>
+                                <tr><th class="resizable-column sorting sorting_asc" tabindex="0" aria-controls="sortation-results-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="SLU_ID: activate to sort column descending" style="width: 110.406px;">SLU_ID</th><th class="resizable-column sorting" tabindex="0" aria-controls="sortation-results-table" rowspan="1" colspan="1" aria-label="S_ORDER_ID: activate to sort column ascending" style="width: 110.406px;">S_ORDER_ID</th><th class="sorting" tabindex="0" aria-controls="sortation-results-table" rowspan="1" colspan="1" aria-label="VAS_TYPE: activate to sort column ascending" style="width: 110.406px;">VAS_TYPE</th><th class="resizable-column sorting" tabindex="0" aria-controls="sortation-results-table" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending" style="width: 110.406px;">Location</th><th class="resizable-column sorting" tabindex="0" aria-controls="sortation-results-table" rowspan="1" colspan="1" aria-label="ARR_TIME: activate to sort column ascending" style="width: 110.406px;">ARR_TIME</th><th class="sorting" tabindex="0" aria-controls="sortation-results-table" rowspan="1" colspan="1" aria-label="SKU: activate to sort column ascending" style="width: 110.469px;">SKU</th></tr>
+                            </thead>
+                            <tbody><tr><td>0074040</td><td>0015524570</td><td>null</td><td>KERING.PST.PACK.PAC2.STPA02PS28</td><td>Fri, 17 Nov 2023 07:18:58 GMT</td><td>KER#8132902276</td></tr><tr><td>0110728</td><td>null</td><td>null</td><td>KERING.PST.DYNBUF.BUF3.STBF030002</td><td>Fri, 17 Nov 2023 16:32:56 GMT</td><td>KER#8132902276</td></tr></tbody>
+                        </table><div class="dataTables_info" id="sortation-results-table_info" role="status" aria-live="polite">Showing 1 to 7 of 7 entries</div><div class="dataTables_paginate paging_simple_numbers" id="sortation-results-table_paginate"><a class="paginate_button previous disabled" aria-controls="sortation-results-table" data-dt-idx="0" tabindex="-1" id="sortation-results-table_previous">Previous</a><span><a class="paginate_button current" aria-controls="sortation-results-table" data-dt-idx="1" tabindex="0">1</a></span><a class="paginate_button next disabled" aria-controls="sortation-results-table" data-dt-idx="2" tabindex="-1" id="sortation-results-table_next">Next</a></div></div>
+                    </div>
+                </div>
+                <div class="table-wrapper" id="alarm-table-container">
+                    <h2>Alarm Details Results</h2>
+                    <table id="alarm-table">
+                        <!-- Alarm table content -->
+                        <thead>
+                            <tr>
+                                <th>Details</th>
+                                <th>Create Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="processing-indicator" class="hidden" style="display: none;">Processing...</div>
+                </div>
+            </div>
+            <div class="tab-content tab" id="loadunit-check-content">
+                <!-- Content for LoadUnit Check tab -->
+            </div>
+        </div>
+    </div>
+<!-- Add a scroller for the SKU Results table -->
+<style>
+    #sku-results-container {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    <div> class="display-area" id="display-area-2"> <!-- This is where the new tab content will reside -->
+        <!-- Content for LoadUnit Check tab -->
+        <div class="tab-content tab" id="loadunit-check-content" style="display: none;">
+            <!-- ... (content specific to LoadUnit Check tab) ... -->
+        </div>    
+</style>
+    <script>
+        // JavaScript for handling tab switching
+        $(document).ready(function() {
+            $('.tabs li').click(function() {
+                const tabId = $(this).attr('id');
+                $('.tabs li').removeClass('active');
+                $(this).addClass('active');
+                $('.display-area').removeClass('active');
+                $(`#${tabId.replace('tab', 'display-area')}`).addClass('active');
+            });
+          });
+          $(document).ready(function() {
+            var table = $('#sku-results-table').DataTable({
+                // Initialize your DataTable with its configurations here
+            });
+        
+            // Store the initial data of the SKU Results table
+            var initialData = table.rows().data().toArray();
+        
+            // Apply ColResizable to specific columns (excluding the hidden columns)
+            $('#sku-results-table').colResizable({
+                liveDrag: true,
+                partialRefresh: true,
+                resizeMode: 'fit',
+                minWidth: 50 // Set a minimum width for columns
+            });
+        
+            $('#sku-results-table_filter input').on('keyup', function() {
+                // On keyup in the search box, check if the search value is empty
+                if (this.value === '') {
+                    // If the search box is empty, reload the initial data into the table
+                    table.clear().rows.add(initialData).draw();
+                }
+            });
+        });
+        
+          
+        document.getElementById('go-button').addEventListener('click', executeQueries);
+        document.getElementById('order-id').addEventListener('keydown', function (event) {
+            if (event.key === "Enter") {
+                executeQueries();
+            }
+        });
+
+        function executeQueries() {
+            clearTable(document.getElementById('status-table'));
+            clearTable(document.getElementById('order-details-table'));
+            clearTable(document.getElementById('alarm-table'));
+            clearTable(document.getElementById('sku-results-table'));
+            clearTable(document.getElementById('sortation-results-table'));
+        
+            var orderId = document.getElementById('order-id').value;
+            var statusTable = document.getElementById('status-table').querySelector('tbody');
+            var orderDetailsTable = document.getElementById('order-details-table').querySelector('tbody');
+            var alarmTable = document.getElementById('alarm-table').querySelector('tbody');
+            var skuResultsTable = document.getElementById('sku-results-table').querySelector('tbody');
+            var sortationResultsTable = document.getElementById('sortation-results-table').querySelector('tbody');
+            
+            document.getElementById('processing-indicator').style.display = 'block';
+        
+            fetch('/execute-queries', {
+                method: 'POST',
+                body: new URLSearchParams({ order_id: orderId }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('processing-indicator').style.display = 'none';
+        
+                if (data.error) {
+                    // Handle the error
+                    console.error('Error executing queries:', data.error);
+                } else {
+                    var skuValue = ""; // Initialize SKU value
+        
+                    if (data.ORDER_DETAILS.length > 0) {
+                        // Extract SKU value from the first column of Order Details
+                        skuValue = data.ORDER_DETAILS[0].SKU;
+                        
+                        data.ORDER_DETAILS.forEach(function(item) {
+                            orderDetailsTable.innerHTML += '<tr><td>' + item.ORDER_LINE_ID + '</td><td class="sku-link" onclick="showSkuResults(\'' + item.SKU + '\')">' + item.SKU + '</td><td>' + item.COMPANY + '</td><td>' + item.COUNTRY + '</td><td>' + item.QUALITY + '</td><td>' + item.QUANTITY + '</td><td>' + item.REQUIRED_VAS + '</td></tr>';
+                        });
+                    }
+        
+                    if (data.STATUS.length > 0) {
+                        data.STATUS.forEach(function(item) {
+                            statusTable.innerHTML += '<tr><td>' + item.STATUS + '</td><td>' + item.F_CREATE_DATE + '</td><td>' + item.F_MOD_DATE + '</td><td>' + item.SORTATION_ORDER_ID + '</td></tr>';
+                        });
+                    }
+        
+                    if (data.ALARM.length > 0) {
+                        document.getElementById('check-alarm-results').style.display = 'block';
+        
+                        data.ALARM.forEach(function(item) {
+                            alarmTable.innerHTML += '<tr><td>' + item.DETAILS + '</td><td>' + item.CREATE_DATE + '</td></tr>';
+                        });
+                    }
+        
+                    // Show the SKU results table
+                    document.getElementById('sku-results').style.display = 'block';
+        
+                    // Display SKU Results
+                    if (data.INV_RESULTS.length > 0) {
+                        // Calculate the total quantity and display it
+                        var totalQuantity = data.INV_RESULTS.reduce((sum, item) => sum + item.QTY, 0);
+                        document.getElementById('sum-quantity').innerText = totalQuantity;
+        
+                        data.INV_RESULTS.forEach(function(item) {
+                            skuResultsTable.innerHTML += '<tr><td>' + item.SKU + '</td><td>' + item.POUCHABLE + '</td><td>' + item.COUNTRY + '</td><td>' + item.QUALITY + '</td><td>' + item.COMPANY + '</td><td>' + item.QTY + '</td><td>' + item.QTY_FREE + '</td><td>' + item.AVAILABILITY_STATUS + '</td><td>' + item.LOC + '</td></tr>';
+                        });
+                        
+                        // Sort the SKU Results table by Availability Status 'reserved' first
+                        sortTable('sku-results-table', 7, 'reserved');
+        
+                        // Make the SKU Results table headers filterable
+                        makeTableFilterable('sku-results-table');
+                    }
+        
+                    // Show the Sortation results table
+                    document.getElementById('sortation-results').style.display = 'block';
+        
+                    // Filter Sortation results based on extracted SKU value
+                    if (data.SORTATION_RESULTS.length > 0) {
+                        var matchingSortationResults = data.SORTATION_RESULTS.filter(item => item.SKU === skuValue);
+        
+                        if (matchingSortationResults.length > 0) {
+                            matchingSortationResults.forEach(function(item) {
+                                sortationResultsTable.innerHTML += '<tr><td>' + item.SLU_ID + '</td><td>' + item.S_ORDER_ID + '</td><td>' + item.VAS_TYPE + '</td><td>' + item.LOCATION + '</td><td>' + item.ARR_TIME + '</td><td>' + item.SKU + '</td></tr>';
+                            });
+                            console.log('Sortation rows appended successfully.');
+                        } else {
+                            console.log('No matching Sortation results found for SKU:', skuValue);
+                        }
+                    } else {
+                        console.log('No Sortation results available.');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('processing-indicator').style.display = 'none';
+            });
+        }
+        
+        function showSkuResults(sku) {
+            var skuResultsTable = document.getElementById('sku-results-table').querySelector('tbody');
+            var sortationResultsTable = document.getElementById('sortation-results-table').querySelector('tbody');
+        
+            document.getElementById('processing-indicator').style.display = 'block';
+        
+            fetch('/fetch-sku-results', {
+                method: 'POST',
+                body: new URLSearchParams({ sku: sku }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('processing-indicator').style.display = 'none';
+        
+                console.log('Received data:', data);
+        
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    console.log('SKU Results:', data.INV_RESULTS);
+                    console.log('Sortation Results:', data.SORTATION_RESULTS);
+        
+                    // Clear existing rows
+                    skuResultsTable.innerHTML = '';
+                    sortationResultsTable.innerHTML = '';
+        
+                    // Display SKU Results
+                    if (data.INV_RESULTS.length > 0) {
+                        data.INV_RESULTS.forEach(function(row) {
+                            skuResultsTable.innerHTML += '<tr><td>' + row[1] + '</td><td>' + row[0] + '</td><td>' + row[2] + '</td><td>' + row[3] + '</td><td>' + row[4] + '</td><td>' + row[5] + '</td><td>' + row[6] + '</td><td>' + row[7] + '</td><td>' + row[8] + '</td></tr>';
+                        });
+                        makeTableFilterable('sku-results-table');
+                        $('#sku-results-table').DataTable();
+                    }
+        
+                    // Display Sortation Results
+                    if (data.SORTATION_RESULTS.length > 0) {
+                        data.SORTATION_RESULTS.forEach(function(row) {
+                            sortationResultsTable.innerHTML += '<tr><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td><td>' + row[3] + '</td><td>' + row[4] + '</td><td>' + row[5] + '</td></tr>';
+                        });
+                        $('#sortation-results-table').DataTable();
+                    }
+                    
+                    // Show the SKU and Sortation results tables
+                    document.getElementById('sku-results').style.display = 'block';
+                    document.getElementById('sortation-results').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching SKU and Sortation results:', error);
+                document.getElementById('processing-indicator').style.display = 'none';
+            });
+        }
+        
+            function clearTable(table) {
+                var tbody = table.querySelector('tbody');
+                tbody.innerHTML = '';
+            }
+    
+            function sortTable(tableId, columnIndex, targetValue) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById(tableId);
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < rows.length - 1; i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName('td')[columnIndex];
+                        y = rows[i + 1].getElementsByTagName('td')[columnIndex];
+                        if (x.innerHTML === targetValue && y.innerHTML !== targetValue) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+    
+            function makeTableFilterable(tableId) {
+                $('#' + tableId).DataTable();
+            }
+        </script>
+    
+    
+    
+    </div></body></html>
