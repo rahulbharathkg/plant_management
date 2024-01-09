@@ -5,7 +5,7 @@ def perform_trace_check(loadunit_id, db_connection):
         SELECT TO_CHAR(CDATE, 'DD-MON-YY HH.MI PM') AS MOD_DATE, OPERATION_ID, USER_DATA
         FROM APP_MM_TRACE
         WHERE CDATE >= SYSDATE - 2 AND USER_DATA LIKE :loadunit_id
-        
+        ORDER BY CDATE DESC
         """
 
         # Fetch the data from the database without sorting

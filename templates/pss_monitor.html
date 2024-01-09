@@ -1,4 +1,9 @@
 <div class="pss-container">
+    <audio id="alertSound" src="static/alarm-82999.mp3" preload="auto"></audio>
+    
+    <audio id="notesound" src="static/alarm-82999.mp3" preload="auto"></audio>
+    
+    
     <div class="pss-header">PSS Flow</div>
     <!-- Sample HTML structure for GIFs -->
     <div class="PSS-Flow">
@@ -7,17 +12,32 @@
         <div class="circle pss-buffer">Buffer</div>
         <div class="circle pss-cj2">CJ2</div>
         <div class="pss-presort-1">
-            <div class="gear-icon"></div>
+            <div class="gear-placeholder">
+                <!-- Placeholder for the gear icon/image -->
+                <img class="gear-img" src="static/gear_img.png" alt="Gear Image">
+                <!-- Placeholder for the gear GIF -->
+                <div class="gear-gif" style="background-image: url('static/gear_gif.gif');"></div>
+            </div>
             <p class="pss-presort-label">Presort 1</p>
         </div>
         
         <div class="pss-presort-2">
-            <div class="gear-icon"></div>
+            <div class="gear-placeholder">
+                <!-- Placeholder for the gear icon/image -->
+                <img class="gear-img" src="static/gear_img.png" alt="Gear Image">
+                <!-- Placeholder for the gear GIF -->
+                <div class="gear-gif" style="background-image: url('static/gear_gif.gif');"></div>
+            </div>
             <p class="pss-presort-label">Presort 2</p>
         </div>
         
         <div class="pss-presort-3">
-            <div class="gear-icon"></div>
+            <div class="gear-placeholder">
+                <!-- Placeholder for the gear icon/image -->
+                <img class="gear-img" src="static/gear_img.png" alt="Gear Image">
+                <!-- Placeholder for the gear GIF -->
+                <div class="gear-gif" style="background-image: url('static/gear_gif.gif');"></div>
+            </div>
             <p class="pss-presort-label">Presort 3</p>
         </div>
         <svg class="flow-lines">
@@ -118,41 +138,107 @@
         <div class="rectangle pss-STATIONS_PAC4">STATIONS_PAC4</div>
         <div class="rectangle pss-STATIONS_PAC5">STATIONS_PAC5</div>
         <div class="rectangle pss-STATIONS_PAC6">STATIONS_PAC6</div>
+        <div class="rectangle pss-HOS1">HOS_PAC1</div>
+        <div class="rectangle pss-HOS2">HOS_PAC2</div>
+        <div class="rectangle pss-HOS3">HOS_PAC3</div>
+        <div class="rectangle pss-HOS4">HOS_PAC4</div>
+        <div class="rectangle pss-HOS5">HOS_PAC5</div>
+        <div class="rectangle pss-HOS6">HOS_PAC6</div>
+        <div class="rectangle pss-HOS">HOS</div>
                 
-        <div class="pss-loop-circles">
-            <div class="oval pss-loop-pac-1" data-label="LOOP_PAC 1"></div>
-            <div class="oval pss-loop-pac-2" data-label="LOOP_PAC 2"></div>
-            <div class="oval pss-loop-pac-3" data-label="LOOP_PAC 3"></div>
-            <div class="oval pss-loop-pac-4" data-label="LOOP_PAC 4"></div>
-            <div class="oval pss-loop-pac-5" data-label="LOOP_PAC 5"></div>
-            <div class="oval pss-loop-pac-6" data-label="LOOP_PAC 6"></div>
-          </div>
+        <div class="pss-loop-pac-1">
+            <div class="loop-container">
+                <!-- Placeholder for the loop image -->
+                <img class="loop-img" src="static/loop_img.png" alt="Loop Image">
+                <!-- Placeholder for the loop GIF -->
+                <div class="loop-gif" style="background-image: url('static/loop_gif.gif');"></div>
+            </div>
+            
+        </div>
+        
+        <div class="pss-loop-pac-2">
+            <div class="loop-container">
+                <!-- Placeholder for the loop image -->
+                <img class="loop-img" src="static/loop_img.png" alt="Loop Image">
+                <!-- Placeholder for the loop GIF -->
+                <div class="loop-gif" style="background-image: url('static/loop_gif.gif');"></div>
+            </div>
+            
+        </div>
+        
+        <div class="pss-loop-pac-3">
+            <div class="loop-container">
+                <!-- Placeholder for the loop image -->
+                <img class="loop-img" src="static/loop_img.png" alt="Loop Image">
+                <!-- Placeholder for the loop GIF -->
+                <div class="loop-gif" style="background-image: url('static/loop_gif.gif');"></div>
+            </div>
+           
+        </div>
+        
+        <div class="pss-loop-pac-4">
+            <div class="loop-container">
+                <!-- Placeholder for the loop image -->
+                <img class="loop-img" src="static/loop_img.png" alt="Loop Image">
+                <!-- Placeholder for the loop GIF -->
+                <div class="loop-gif" style="background-image: url('static/loop_gif.gif');"></div>
+            </div>
+            
+        </div>
+        
+        <div class="pss-loop-pac-5">
+            <div class="loop-container">
+                <!-- Placeholder for the loop image -->
+                <img class="loop-img" src="static/loop_img.png" alt="Loop Image">
+                <!-- Placeholder for the loop GIF -->
+                <div class="loop-gif" style="background-image: url('static/loop_gif.gif');"></div>
+            </div>
+            
+        </div>
+        
+        <div class="pss-loop-pac-6">
+            <div class="loop-container">
+                <!-- Placeholder for the loop image -->
+                <img class="loop-img" src="static/loop_img.png" alt="Loop Image">
+                <!-- Placeholder for the loop GIF -->
+                <div class="loop-gif" style="background-image: url('static/loop_gif.gif');"></div>
+            </div>
+            
+        </div>
+        
           <div class="display-board">
             <!-- Display items -->
-            <div class="display-item LED-INDUCTION">0000</div>
-            <div class="display-item LED-CJ1">0000</div>
-            <div class="display-item LED-BUFFER_NOT_EMPTY">0000</div>
-            <div class="display-item LED-EMPTY_BUFFER">0000</div>
-            <div class="display-item LED-CJ2">0000</div>
-            <div class="display-item LED-PRES_1">0000</div>
-            <div class="display-item LED-PRES_2">0000</div>
-            <div class="display-item LED-PRES_3">0000</div>
-            <div class="display-item LED-MATRIX1">0000</div>
-            <div class="display-item LED-MATRIX2">0000</div>
-            <div class="display-item LED-MATRIX3">0000</div>
-            <div class="display-item LED-LOOP_PAC1">0000</div>
-            <div class="display-item LED-LOOP_PAC2">0000</div>
-            <div class="display-item LED-LOOP_PAC3">0000</div>
-            <div class="display-item LED-LOOP_PAC4">0000</div>
-            <div class="display-item LED-LOOP_PAC5">0000</div>
-            <div class="display-item LED-LOOP_PAC6">0000</div>
-            <div class="display-item LED-STATIONS_PAC3">0000</div>
-            <div class="display-item LED-STATIONS_PAC4">0000</div>
-            <div class="display-item LED-STATIONS_PAC1">0000</div>
-            <div class="display-item LED-STATIONS_PAC2">0000</div>
-            <div class="display-item LED-STATIONS_PAC5">0000</div>
-            <div class="display-item LED-STATIONS_PAC6">0000</div>
-            <div class="display-item LED-TOTAL">0000</div>
+            <div class="pss-display-item LED-INDUCTION">0000</div>
+            <div class="pss-display-item LED-CJ1">0000</div>
+            <div class="pss-display-item LED-BUFFER_NOT_EMPTY">0000</div>
+            <div class="pss-display-item LED-EMPTY_BUFFER">0000</div>
+            <div class="pss-display-item LED-CJ2">0000</div>
+            <div class="pss-display-item LED-PRES_1">0000</div>
+            <div class="pss-display-item LED-PRES_2">0000</div>
+            <div class="pss-display-item LED-PRES_3">0000</div>
+            <div class="pss-display-item LED-MATRIX1">0000</div>
+            <div class="pss-display-item LED-MATRIX2">0000</div>
+            <div class="pss-display-item LED-MATRIX3">0000</div>
+            <div class="pss-display-item LED-LOOP_PAC1">0000</div>
+            <div class="pss-display-item LED-LOOP_PAC2">0000</div>
+            <div class="pss-display-item LED-LOOP_PAC3">0000</div>
+            <div class="pss-display-item LED-LOOP_PAC4">0000</div>
+            <div class="pss-display-item LED-LOOP_PAC5">0000</div>
+            <div class="pss-display-item LED-LOOP_PAC6">0000</div>
+            <div class="pss-display-item LED-STATIONS_PAC3">0000</div>
+            <div class="pss-display-item LED-STATIONS_PAC4">0000</div>
+            <div class="pss-display-item LED-STATIONS_PAC1">0000</div>
+            <div class="pss-display-item LED-STATIONS_PAC2">0000</div>
+            <div class="pss-display-item LED-STATIONS_PAC5">0000</div>
+            <div class="pss-display-item LED-STATIONS_PAC6">0000</div>
+            <div class="pss-display-item LED-TOTAL">0000</div>
+            <div class="hos-display-item LED-HOS1">0000</div>
+            <div class="hos-display-item LED-HOS2">0000</div>
+            <div class="hos-display-item LED-HOS3">0000</div>
+            <div class="hos-display-item LED-HOS4">0000</div>
+            <div class="hos-display-item LED-HOS5">0000</div>
+            <div class="hos-display-item LED-HOS6">0000</div>
+            <div class="hos-display-item LED-HOSP">0000</div>
           </div>
           
           
@@ -166,8 +252,14 @@
         <option value="600000">10 minutes</option>
         <option value="1800000">30 minutes</option>
       </select>
-      
-  <button class="dynamic-play paused" id="pssPlayBtn"></button>
-   
+          
+      <button class="dynamic-play paused" id="pssPlayBtn" onclick="togglePlayButton()"></button>
+  <button id="muteButton">🔊</button>
+  <div class="popup" style="display: none;">
+    <div class="popup-content">
+        <!-- Container for station details -->
+        <div class="station-details"></div>
+    </div>
+</div>
 
 </div>

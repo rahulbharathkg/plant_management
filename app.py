@@ -6,7 +6,7 @@ from config import db_username, db_password, db_host, db_port, db_service_name
 from flask import Flask, render_template, redirect, url_for, session, request
 from functools import wraps
 from loadunit_functions import perform_trace_check, perform_transport_request_check, perform_loadunit_check
-from pss_monitor import fetch_pss_data, fetch_presort_lane_data
+from pss_monitor import fetch_pss_data, fetch_presort_lane_data, fetch_hos_data,fetch_station_data
 import traceback
 
 app = Flask(__name__, template_folder='templates')
@@ -454,6 +454,35 @@ def get_presort_lane_data():
         app.logger.error(f"Error fetching presort lane data: {traceback.format_exc()}")
         return jsonify([{"error": "Failed to fetch presort lane data"}])
         
-    
+@app.route('/fetch_hos_data', methods=['GET'])
+def get_hos_data():
+    try:
+        hos_data = fetch_hos_data(db_connection)
+        if hos_data is not None:
+            app.logger.info("HOS data fetched successfully")
+            print("HOS data fetched successfully:", hos_data)  # Log successful data retrieval
+            return jsonify(hos_data)
+        else:
+            app.logger.error("Failed to fetch hos data")
+            return jsonify({"error": "Failed to fetch hos data"})
+    except Exception as e:
+        app.logger.error(f"Error fetching hos data: {traceback.format_exc()}")
+        return jsonify({"error": "Failed to fetch hos data"})
+
+@app.route('/station_query', methods=['POST'])
+def station_query():
+    try:
+        data = request.get_json()
+        station_id = data.get('station_id')
+        station_data = fetch_station_data(db_connection, station_id)
+
+        if station_data:
+            return jsonify(station_data)
+        else:
+            return jsonify({"error": "No data available for the station"})
+    except Exception as e:
+        app.logger.error(f"Error executing query: {e}")
+        return jsonify({"error": "Failed to execute the query or retrieve data"})
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080,debug=True)

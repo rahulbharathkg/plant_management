@@ -70,6 +70,7 @@
   background-color: #FFFFFF;
   font-weight: bolder;
   position: relative;
+  cursor: pointer;
 }
 
 /* Adjust positions for symbols */
@@ -97,24 +98,29 @@
   left: 48%;
 }
 
-/* Add a class to pause the animation */
-.paused-animation {
-  animation-play-state: paused;
-}
-
-.gear-icon {
+.gear-img,
+.gear-gif {
   width: 50px;
   height: 50px;
   border-radius: 5%;
-  background-image: url('https://cdn.dribbble.com/users/4011649/screenshots/10677615/media/948d65ef147246f25e31d44b9a59e660.gif');
+  
   background-size: contain; /* or adjust based on your preference */
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-  animation-play-state: paused;
+  
   font-weight: bolder;
   position: relative;
 }
+
+.playing .gear-gif {
+    display: block; /* Show GIF when playing */
+}
+
+.paused .gear-img {
+    display: block; /* Show image when paused */
+}
+
 
 /* Adjust positioning for each gear icon */
 .pss-presort-1 {
@@ -139,7 +145,7 @@
 .pss-presort-lanes-1 {
   position: absolute;
   top: 25%;
-  left: 5%;
+  left: 6%;
     
 }
 
@@ -227,27 +233,46 @@
   font-size: 18;
 }
 
-/* Updated CSS */
-/* Define a common style for the oval */
-.oval {
+
+.loop-container {
   position: relative;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-image: url('https://sp-ao.shortpixel.ai/client/q_glossy,ret_img///i0.wp.com/irp-intralogistica.com/wp-content/uploads/2018/11/Transportadora.gif');
+  width: 150px; /* Adjust width as needed */
+  height: 150px; /* Adjust height as needed */
+}
+
+.loop-img {
+  position: absolute;
+  width: 90px;
+  height: 25px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-  animation-play-state: paused;
+  /* Specific position for the image within the loop */
+  top: 30%; /* Adjust as needed */
+  left: 30%; /* Adjust as needed */
+}
+
+.loop-gif {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  /* Specific position for the GIF within the loop */
+  top: 40%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Center the GIF */
 }
 
 /* Position the text above the oval */
-.oval::before {
+.loop-container::before {
   content: attr(data-label); /* Display data-label attribute content */
   display: block;
   position: absolute;
-  top: 30px;
+  top: 10px;
   left: 50%;
   transform: translateX(-10%);
   font-weight: bold;
@@ -281,47 +306,43 @@
   content: "LOOP_PAC 6";
 }
 
+/* Each loop's specific position */
 .pss-loop-pac-1 {
   position: absolute;
   top: 60%;
   left: 1%;
-  /* Additional styles for LOOP_PAC1 circle */
 }
 
 .pss-loop-pac-2 {
   position: absolute;
   top: 60%;
   left: 12%;
-  /* Additional styles for LOOP_PAC2 circle */
 }
 
 .pss-loop-pac-3 {
   position: absolute;
   top: 60%;
   left: 60%;
-  /* Additional styles for LOOP_PAC3 circle */
 }
 
 .pss-loop-pac-4 {
   position: absolute;
   top: 60%;
   left: 83.7%;
-  /* Additional styles for LOOP_PAC4 circle */
 }
 
 .pss-loop-pac-5 {
   position: absolute;
   top: 60%;
   left: 27%;
-  /* Additional styles for LOOP_PAC5 circle */
 }
 
 .pss-loop-pac-6 {
   position: absolute;
   top: 60%;
   left: 42%;
-  /* Additional styles for LOOP_PAC6 circle */
 }
+
 
 .line1 {
   position: absolute;
@@ -452,7 +473,7 @@
   position: absolute;
   top: 4%;
   left: 83%;
-  width: 100px;
+  width: 80px;
   height: 40px;
   border: 2px solid black;
   display: flex;
@@ -467,19 +488,11 @@
   background-color: #ccc;
 }
 
-#pssPlayBtn::before {
-  content: "\25B6"; /* Unicode character for Play symbol */
-}
-
-.paused::before {
-  content: "\23F8"; /* Use the Pause symbol for the paused state */
-}
-
 /* Style for the dropdown */
 #intervalSelect {
   position: absolute;
   top: 4.2%;
-  left: 90%;
+  left: 88%;
   font-size: 16px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -501,7 +514,7 @@
 }
 
 /* Common style for display items */
-.display-item {
+.pss-display-item {
   font-family: 'Arial', sans-serif;
   font-size: 16px;
   color: #FFFFFF;
@@ -512,7 +525,7 @@
   width: 50px;
   text-align: center;
   height: 18px;
-  background-color: #9C27B0;
+  background-color: grey;
 }
 
 /* Positioning for each display item */
@@ -667,3 +680,131 @@
   top: 4%;
   left: 69%;
 }
+
+/* Common style for display items */
+.hos-display-item {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #FFFFFF;
+  border-radius: 10px;
+  padding: 2px 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 50px;
+  text-align: center;
+  height: 18px;
+  background-color:grey;
+}
+
+/* Row 7 */
+.LED-HOS3 {
+  position: absolute;
+  top: 84%;
+  left: 62.5%;
+}
+
+.LED-HOS4 {
+  position: absolute;
+  top: 84%;
+  left: 86%;
+}
+
+.LED-HOS1 {
+  position: absolute;
+  top: 84%;
+  left: 2%;
+}
+
+/* Row 8 */
+.LED-HOS2 {
+  position: absolute;
+  top: 84%;
+  left: 16%;
+}
+
+.LED-HOS5 {
+  position: absolute;
+  top: 84%;
+  left: 30%;
+}
+
+.LED-HOS6 {
+  position: absolute;
+  top: 84%;
+  left: 44%;
+}
+
+/* Row 9 */
+.LED-HOSP {
+  position: absolute;
+  top: 4%;
+  left: 76%;
+}
+/* RECTANGLE*/
+.pss-HOS1 {
+  position: absolute;
+  top: 82%;
+  left: 1%;
+}
+
+.pss-HOS2 {
+  position: absolute;
+  top: 82%;
+  left: 14%;
+}
+
+.pss-HOS3 {
+  position: absolute;
+  top: 82%;
+  left: 61.5%;
+}
+
+.pss-HOS4 {
+  position: absolute;
+  top: 82%;
+  left: 85%;
+}
+
+.pss-HOS5 {
+  position: absolute;
+  top: 82%;
+  left: 29%;
+}
+
+.pss-HOS6 {
+  position: absolute;
+  top: 82%;
+  left: 43%;
+}
+
+.pss-HOS {
+  position: absolute;
+  top: 1%;
+  left: 75.5%;
+}
+
+#muteButton {
+  position: absolute;
+  top: 4%;
+  left: 95%;
+  padding: 10px 20px;
+  background-color: #d62f2fa1;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font: 19px;;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 999;
+}
+
